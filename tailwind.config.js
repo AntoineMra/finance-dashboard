@@ -1,5 +1,4 @@
-/* eslint-env node */
-require("@rushstack/eslint-patch/modern-module-resolution");
+/* eslint-disable no-undef */
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
