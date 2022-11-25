@@ -1,0 +1,14 @@
+@import "./base.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: Poppins, system-ui, sans-serif;
+  }
+}
+
+body {
+  position: relative;
+}
