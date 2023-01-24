@@ -25,7 +25,7 @@
 import { ref } from 'vue';
 
 const selectedType = ref<string>('all')
-const options = ref<Record<string,any>[]>([
+const options = ref<Record<string,string>[]>([
 	{ text: 'Type', value: 'all' },
 	{ text: 'Dépense', value: 'expense' },
 	{ text: 'Revenu', value: 'income' }
