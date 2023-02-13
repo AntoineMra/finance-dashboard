@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "@/views/DashboardView.vue";
 import BudgetView from "@/views/budget/BudgetView.vue";
 import NewBudgetView from "@/views/budget/NewBudgetView.vue";
+import ExpenseForm from "@/components/budget/forms/ExpenseForm.vue";
+import IncomeForm from "@/components/budget/forms/IncomeForm.vue";
 import GoalsView from "@/views/goals/GoalsView.vue";
 import InvestView from "@/views/invest/InvestView.vue";
 
@@ -17,12 +19,23 @@ const router = createRouter({
       path: "/budget",
       name: "budget",
       component: BudgetView,
-      children: [
+    },
+    {
+      path: "/budget/new",
+      name: "budgetFrom",
+      component: NewBudgetView,
+      children: [ 
         {
-          path: "/new",
-          component: NewBudgetView,
-        },
-      ],
+          path: "expense",
+          name: "expenseForm",
+          component: ExpenseForm,
+        },    
+        {
+          path: "income",
+          name: "incomeForm",
+          component: IncomeForm,
+        }
+      ]
     },
     {
       path: "/invest",

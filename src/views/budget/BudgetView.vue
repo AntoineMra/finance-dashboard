@@ -3,6 +3,7 @@
     <header class="py-8 pl-8 pb-16">
       <h1 class="text-4xl font-bold">Répertoire de comptes</h1>
     </header>
+
     <section class="">
       <div class="w-full flex items-stretch justify-start flex-wrap">
         <router-link
