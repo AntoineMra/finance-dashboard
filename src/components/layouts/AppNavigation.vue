@@ -4,7 +4,7 @@
 			<h2 class="font-bold text-3xl py-8 text-center">Personal Finance</h2>
 			<ul class="nav-list text-slate-800">
 				<li class="py-4">
-					<router-link to="/" class="flex text-slate-400 hover:text-slate-500 transition-colors" data-cy="nav-dashboard">
+					<router-link :exact-active-class="'isActive'" to="/" class="flex text-slate-400 hover:text-slate-500 transition-colors" data-cy="nav-dashboard">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
 							stroke="currentColor" stroke-width="2">
 							<path stroke-linecap="round" stroke-linejoin="round"
@@ -15,7 +15,7 @@
 				</li>
 
 				<li class="py-4">
-					<router-link to="/budget" class="flex text-slate-400 hover:text-slate-500 transition-colors" data-cy="nav-budget">
+					<router-link :active-class="'isActive'" to="/budget" class="flex text-slate-400 hover:text-slate-500 transition-colors" data-cy="nav-budget">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
 							stroke="currentColor" stroke-width="2">
 							<path stroke-linecap="round" stroke-linejoin="round"
@@ -26,7 +26,7 @@
 				</li>
 
 				<li class="py-4">
-					<router-link to="/invest" class="flex text-slate-400 hover:text-slate-500 transition-colors" data-cy="nav-invest">
+					<router-link :active-class="'isActive'" to="/invest" class="flex text-slate-400 hover:text-slate-500 transition-colors" data-cy="nav-invest">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
 							stroke="currentColor" stroke-width="2">
 							<path stroke-linecap="round" stroke-linejoin="round"
@@ -37,7 +37,7 @@
 				</li>
 
 				<li class="py-4">
-					<router-link to="/goals" class="flex text-slate-400 hover:text-slate-500 transition-colors" data-cy="nav-goals">
+					<router-link :active-class="'isActive'" to="/goals" class="flex text-slate-400 hover:text-slate-500 transition-colors" data-cy="nav-goals">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
 							stroke="currentColor" stroke-width="2">
 							<path stroke-linecap="round" stroke-linejoin="round"
@@ -60,7 +60,7 @@
 </script>
 
 <style lang="scss" scoped>
-	.router-link-active{
+	.isActive{
 		color: #a855f7 !important;
 		span{
 			color: #a855f7 !important;

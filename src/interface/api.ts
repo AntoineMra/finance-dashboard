@@ -1,43 +1,45 @@
 export interface Budget {
-  id: number;
+  id: string;
   title: string;
-  month: string;
-  year: string;
-  expenses: Transac[];
-  incomes: Transac[];
+  date: Date;
+  formatedDate: string;
+  status: string;
+  transactions: Transac[];
+  createdAt?: Date;
 }
 
 export interface Category {
-  id: number;
-  title: string;
-  type: string;
-  expenses: Transac[];
-  incomes: Transac[];
-  color?: string;
+  id: string;
+  label: string;
+  domain: Domain;
 }
 
 export interface Transac {
-  id: number;
+  id: string;
   date?: string;
-  description: string;
+  label: string;
   amount: number;
-  createdAt?: string;
-  budget?: Budget;
-  category?: Category;
+  type: TransacType;
+  category: Category;
+}
+
+export interface Domain {
+  id: string;
+  label: string;
 }
 
 export interface Invest {
-  id: number;
+  id: string;
   initialAmount: number;
   currentAmount: number;
   returnAmount: number;
-  monthlyInvest?: number;
+  monthlyInvest?: string;
   createdAt?: string;
   goals: Goal[];
 }
 
 export interface Goal {
-  id: number;
+  id: string;
   purpose: string;
   endingDate: string;
   amount: number;
@@ -48,10 +50,15 @@ export interface Goal {
 export interface Support {
   id: number;
   name: string;
-  type: Type;
+  type: InvestType;
 }
 
-enum Type {
+enum TransacType {
+  Expense = "expense",
+  Income = "income",
+}
+
+enum InvestType {
   Finance = "Finance",
   Immobilier = "Immobilier",
 }
