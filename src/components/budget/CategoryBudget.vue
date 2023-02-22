@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import CategoryCharts from "../charts/CategoryCharts.vue";
-import { dataset } from "@/interface/charts";
+import type { dataset } from "@/interface/charts";
 import type { Category } from "@/interface/api";
 
 // Gestion Couleur Category Switch case sur category.type -> ajout category.color = code couleur en hexa
