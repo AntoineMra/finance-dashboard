@@ -21,7 +21,7 @@ Année
 
 <script setup lang="ts">
 import type { dataset } from "@/interface/charts";
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 import MediumCharts from "../../charts/MediumCharts.vue";
 
 const props = defineProps({

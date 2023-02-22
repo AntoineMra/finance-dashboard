@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import CategoryCharts from "../charts/CategoryCharts.vue";
 import { dataset } from "@/interface/charts";
 import type { Category } from "@/interface/api";

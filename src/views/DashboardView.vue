@@ -3,11 +3,11 @@
     <header class="py-8 pl-8 pb-16">
       <h1 class="text-6xl font-bold">Finance Dashboard</h1>
     </header>
-    <section class="flex items-start justify-between gap">
-      <div class="w-full">
+    <section class="">
+      <div class="w-full px-16 mb-24">
         <last-month />
       </div>
-      <div class="w-full max-w-screen-sm ml-4">
+      <div class="w-full ml-4">
         <medium-transac transac-type="Dépenses" />
         <medium-transac transac-type="Revenus" />
       </div>

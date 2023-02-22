@@ -24,12 +24,12 @@ const router = createRouter({
       path: "/budget/new",
       name: "budgetFrom",
       component: NewBudgetView,
-      children: [ 
+      children: [
         {
           path: "expense",
           name: "expenseForm",
           component: ExpenseForm,
-        },    
+        },
         {
           path: "income",
           name: "incomeForm",
@@ -49,5 +49,21 @@ const router = createRouter({
     },
   ],
 });
+
+import { useAuthStore } from '@/stores/user'
+
+const authStore = useAuthStore()
+
+router.beforeEach(async (to, from) => {
+  if (
+    // make sure the user is authenticated
+    !authStore.isLoggedIn &&
+    // ❗️ Avoid an infinite redirect
+    to.name !== 'Login'
+  ) {
+    // redirect the user to the login page
+    return { name: 'Login' }
+  }
+})
 
 export default router;

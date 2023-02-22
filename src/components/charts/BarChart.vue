@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
 import { Bar } from "vue-chartjs";
 import {
   Chart as ChartJS,

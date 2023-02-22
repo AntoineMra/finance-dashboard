@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import AppNavigation from "./components/layouts/AppNavigation.vue";
+
+const isLogged = () => {
+  // check if logged
+  return true
+}
 </script>
 
 <template>
-  <main>
+  <main v-if="isLogged()">
     <app-navigation />
     <router-view />
   </main>
