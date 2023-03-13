@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import axios from '../../api/config'
+import { api } from '../../api/config'
 
 const title = ref<string>('')
 const date = ref<Date>()
@@ -48,7 +48,7 @@ const createBudget = () => {
     title: title.value,
     date: date.value
   }
-  axios.post('/budget', data)
+  api.post('/budget', data)
   console.log('Create Budget');
 }
 </script>

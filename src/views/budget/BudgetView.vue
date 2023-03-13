@@ -49,14 +49,26 @@
 </template>
 
 <script setup lang="ts">
+import { api, catchError } from "@/api/config";
 import CardBudget from "@/components/budget/CardBudget.vue";
-import { ref } from "vue";
+import { ref, onBeforeMount } from "vue";
 
 let budgets = ref<[]>([]);
+
+const getBudgets = async () => {
+ const response = await api.get("/budgets")
+ if (response.status !== 200) catchError(response)
+ budgets.value = response.data
+}
 
 const selectBudget = () => {
   // Selection
 };
+
+onBeforeMount(async () => {
+  getBudgets()
+});
+
 </script>
 
 <style scoped>

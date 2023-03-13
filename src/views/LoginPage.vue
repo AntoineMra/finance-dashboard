@@ -70,21 +70,33 @@
 </template>
 
 <script setup lang="ts">
+import { api, catchError } from '@/api/config';
+import { useAuthStore } from '@/stores/user';
 import { ref } from 'vue';
+const authStore = useAuthStore()
 const username = ref('')
 const password = ref('')
 
 const login = async () => {
-      const response = await fetch(import.meta.env.VITE_API_BASE_URL + "/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const loginRes = await api.post("/login",
+      JSON.stringify({
           username: username.value,
           password: password.value,
-        }),
-      });
+        }))
+
+      if ( loginRes.status !== 200 ) {
+        catchError(loginRes)
+      }
+      const res = loginRes.data
+      authStore.setToken(res.token)
+
+      const userRes = await api.get("/whoami")
+
+      if ( userRes.status !== 200 ) {
+        catchError(userRes)
+      }
+
+      authStore.setUser(userRes.data)
     }
 </script>
 
