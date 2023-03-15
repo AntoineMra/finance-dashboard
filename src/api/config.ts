@@ -1,6 +1,5 @@
-import { useAuthStore } from './../stores/user';
 import axios from "axios";
-const authStore = useAuthStore()
+// TODO: Implement Vue Cookies
 
 interface Filters {
   [key: string]: any;
@@ -11,11 +10,11 @@ export const api = axios.create({
     headers: {
         Accept: "application/ld+json",
         "Content-Type": "application/ld+json",
-        Authorization: authStore.token ? `Bearer ${authStore.token}` : "",
+        // Authorization: authStore.token ? `Bearer ${authStore.token}` : "",
     }
   });
 
-  export function generateApiParams(filters: Filters): string {
+export function generateApiParams(filters: Filters): string {
     let params = "";
     Object.keys(filters).forEach((key) => {
       const value = filters[key];
@@ -29,9 +28,9 @@ export const api = axios.create({
     return params;
   }
   
-  export function catchError(response: any) {
+export function catchError(response: any) {
     if (response.status === 401) {
-      authStore.resetToken()
+      // authStore.resetToken()
     }
     throw new Error(response.statusText);
   }
