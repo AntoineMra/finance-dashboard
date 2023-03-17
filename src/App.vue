@@ -2,14 +2,19 @@
 import AppNavigation from "./components/layouts/AppNavigation.vue";
 
 const isLogged = () => {
-  // check if logged
+  if (
+    !$cookies.get("token")
+  ) {
+    return false
+  }
+
   return true
 }
 </script>
 
 <template>
-  <main v-if="isLogged()">
-    <app-navigation />
+  <main>
+    <app-navigation v-if="isLogged()"/>
     <router-view />
   </main>
 </template>

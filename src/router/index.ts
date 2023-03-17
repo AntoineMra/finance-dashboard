@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "@/views/DashboardView.vue";
+import LoginView from "@/views/LoginView.vue";
 import BudgetView from "@/views/budget/BudgetView.vue";
 import NewBudgetView from "@/views/budget/NewBudgetView.vue";
 import ExpenseForm from "@/components/budget/forms/ExpenseForm.vue";
@@ -14,6 +15,11 @@ const router = createRouter({
       path: "/",
       name: "dashboard",
       component: DashboardView,
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginView,
     },
     {
       path: "/budget",
@@ -50,14 +56,10 @@ const router = createRouter({
   ],
 });
 
-import { useAuthStore } from '@/stores/user'
-
-const authStore = useAuthStore()
-
 router.beforeEach(async (to, from) => {
   if (
     // make sure the user is authenticated
-    !authStore.isLoggedIn &&
+    !$cookies.get("token") &&
     // ❗️ Avoid an infinite redirect
     to.name !== 'Login'
   ) {
