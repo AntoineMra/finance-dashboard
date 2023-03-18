@@ -1,5 +1,5 @@
 import axios from "axios";
-const token = $cookies.get('token')
+const token = $cookies.get("token");
 
 export const instance = axios.create({
   baseURL: import.meta.env.VITE_BASE_API_URL,
@@ -8,7 +8,7 @@ export const instance = axios.create({
     Accept: "application/json",
     "Content-Type": "application/json",
     Authorization: token ? `Bearer ${token}` : "",
-  }
+  },
 });
 
 interface Filters {
@@ -31,7 +31,7 @@ export function generateApiParams(filters: Filters): string {
 
 export function catchError(response: any) {
   if (response.status === 401) {
-    $cookies.remove('token')
+    $cookies.remove("token");
   }
   throw new Error(response.statusText);
 }

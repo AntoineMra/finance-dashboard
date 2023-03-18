@@ -1,9 +1,9 @@
-
-
 <template>
   <section class="h-screen">
     <div class="container px-6 py-12 h-full">
-      <div class="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
+      <div
+        class="flex justify-center items-center flex-wrap h-full g-6 text-gray-800"
+      >
         <div class="md:w-8/12 lg:w-6/12 mb-12 md:mb-0">
           <img
             src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
@@ -50,55 +50,56 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useAuthStore } from '@/stores/user';
-import axios from 'axios';
-import { catchError } from '@/api/config';
+import { ref } from "vue";
+import { useAuthStore } from "@/stores/user";
+import axios from "axios";
+import { catchError } from "@/api/config";
 import { useRouter } from "vue-router";
-const username = ref('')
-const password = ref('')
-const authStore = useAuthStore()
-const router = useRouter()
+const username = ref("");
+const password = ref("");
+const authStore = useAuthStore();
+const router = useRouter();
 
 const login = async () => {
   try {
     const response = await axios.post(
       import.meta.env.VITE_BASE_API_URL + "/login",
       JSON.stringify({
-          username: username.value,
-          password: password.value,
-        }),
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          }
-        }
-      )
-      $cookies.set("token", response.data.token )
+        username: username.value,
+        password: password.value,
+      }),
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    //@ts-ignore
+    // eslint-disable-next-line no-undef
+    $cookies.set("token", response.data.token);
 
-      const userRes = await axios.get(import.meta.env.VITE_BASE_API_URL + "/whoami", 
+    const userRes = await axios.get(
+      import.meta.env.VITE_BASE_API_URL + "/whoami",
       {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
           Authorization: `Bearer ${response.data.token}`,
-        }
+        },
       }
-      )
+    );
 
-      if ( userRes.status !== 200 ) {
-        catchError(userRes)
-      }
+    if (userRes.status !== 200) {
+      catchError(userRes);
+    }
 
-      authStore.setUser(userRes.data)
-      router.push('/')
-      
+    authStore.setUser(userRes.data);
+    router.push("/");
   } catch (error) {
     console.error("Unable to connect : " + error);
-    
   }
-}
+};
 </script>
 
 <style lang="scss">

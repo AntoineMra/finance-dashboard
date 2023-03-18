@@ -40,7 +40,6 @@
 </template>
 
 <script setup lang="ts">
-
 const props = defineProps({
   budget: {
     type: Object,
@@ -56,7 +55,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["select"]);
+//const emit = defineEmits(["select"]);
 
 function clearSelect() {
   document.querySelectorAll(".budget-cards").forEach((card) => {

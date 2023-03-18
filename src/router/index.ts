@@ -40,8 +40,8 @@ const router = createRouter({
           path: "income",
           name: "incomeForm",
           component: IncomeForm,
-        }
-      ]
+        },
+      ],
     },
     {
       path: "/invest",
@@ -56,24 +56,27 @@ const router = createRouter({
   ],
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 router.beforeEach(async (to, from) => {
   if (
     // make sure the user is authenticated
+    //@ts-ignore
     !$cookies.get("token") &&
     // ❗️ Avoid an infinite redirect
-    to.name !== 'login'
+    to.name !== "login"
   ) {
-    return '/login'
+    return "/login";
   }
 
   if (
     // make sure the user is authenticated
+    //@ts-ignore
     $cookies.get("token") &&
     // ❗️ Avoid an infinite redirect
-    to.name === 'login'
+    to.name === "login"
   ) {
-    return false
+    return false;
   }
-})
+});
 
 export default router;

@@ -1,13 +1,7 @@
 <template>
-	<div>
-		Goals View
-	</div>
+  <div>Goals View</div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
-
-<style scoped>
-
-</style>
+<style scoped></style>

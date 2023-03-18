@@ -21,11 +21,11 @@ import type { Category } from "@/interface/api";
 
 // Gestion d'un emits sur une category pour filtrer les revenus'
 
-const props = defineProps({
+/* const props = defineProps({
   budget: { type: Object, required: true },
 });
 
-const emit = defineEmits(["category"]);
+const emit = defineEmits(["category"]); */
 
 let categories = ref<Category[]>([]);
 console.log(categories);

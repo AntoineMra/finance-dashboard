@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive  } from "vue";
+import { reactive } from "vue";
 import LineChart from "./LineChart.vue";
 
 interface chartData {

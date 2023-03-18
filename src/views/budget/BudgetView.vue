@@ -56,19 +56,18 @@ import { ref, onBeforeMount } from "vue";
 let budgets = ref<[]>([]);
 
 const getBudgets = async () => {
- const response = await instance.get("/budgets")
- if (response.status !== 200) catchError(response)
- budgets.value = response.data
-}
+  const response = await instance.get("/budgets");
+  if (response.status !== 200) catchError(response);
+  budgets.value = response.data;
+};
 
 const selectBudget = () => {
   // Selection
 };
 
 onBeforeMount(async () => {
-  getBudgets()
+  getBudgets();
 });
-
 </script>
 
 <style scoped>

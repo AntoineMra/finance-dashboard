@@ -1,16 +1,10 @@
 <template>
-	<form class="py-12 px-10">
-
-    </form>
-	<div>
-		<h1>Formulaire de dépenses</h1>
-	</div>
+  <form class="py-12 px-10"></form>
+  <div>
+    <h1>Formulaire de dépenses</h1>
+  </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
-
-<style scoped>
-
-</style>
+<style scoped></style>

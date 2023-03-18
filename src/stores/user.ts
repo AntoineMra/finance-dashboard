@@ -6,7 +6,9 @@ interface UserState {
 }
 
 export const useAuthStore = defineStore("auth", {
-  state: (): UserState => { return { user: null, token: "" } },
+  state: (): UserState => {
+    return { user: null, token: "" };
+  },
   getters: {
     isLoggedIn(state) {
       return state.token !== "";
@@ -21,5 +23,6 @@ export const useAuthStore = defineStore("auth", {
     },
     resetToken() {
       this.token = "";
-    },  },
+    },
+  },
 });
