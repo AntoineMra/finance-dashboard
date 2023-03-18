@@ -49,14 +49,14 @@
 </template>
 
 <script setup lang="ts">
-import { api, catchError } from "@/api/config";
+import { instance, catchError } from "@/api/config";
 import CardBudget from "@/components/budget/CardBudget.vue";
 import { ref, onBeforeMount } from "vue";
 
 let budgets = ref<[]>([]);
 
 const getBudgets = async () => {
- const response = await api.get("/budgets")
+ const response = await instance.get("/budgets")
  if (response.status !== 200) catchError(response)
  budgets.value = response.data
 }

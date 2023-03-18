@@ -12,7 +12,7 @@
           />
         </div>
         <div class="md:w-8/12 lg:w-5/12 lg:ml-20">
-          <form :on-submit="login">
+          <form @submit.prevent="login">
             <!-- Email input -->
             <div class="mb-6">
               <input
@@ -33,25 +33,6 @@
               />
             </div>
 
-            <div class="flex justify-between items-center mb-6">
-              <div class="form-group form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                  id="exampleCheck3"
-                  checked
-                />
-                <label class="form-check-label inline-block text-gray-800" for="exampleCheck2"
-                  >Remember me</label
-                >
-              </div>
-              <a
-                href="#!"
-                class="text-blue-600 hover:text-blue-700 focus:text-blue-700 active:text-blue-800 duration-200 transition ease-in-out"
-                >Forgot password?</a
-              >
-            </div>
-
             <!-- Submit button -->
             <button
               type="submit"
@@ -59,7 +40,7 @@
               data-mdb-ripple="true"
               data-mdb-ripple-color="light"
             >
-              Sign in
+              Se connecter
             </button>
           </form>
         </div>
@@ -70,25 +51,54 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { instance } from '@/api/config'
+import { useAuthStore } from '@/stores/user';
+import axios from 'axios';
+import { catchError } from '@/api/config';
+import { useRouter } from "vue-router";
 const username = ref('')
 const password = ref('')
+const authStore = useAuthStore()
+const router = useRouter()
 
 const login = async () => {
   try {
-    const response = await instance.post(
-      import.meta.env.VITE_API_BASE_URL + "/login",
+    const response = await axios.post(
+      import.meta.env.VITE_BASE_API_URL + "/login",
       JSON.stringify({
           username: username.value,
           password: password.value,
         }),
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          }
+        }
       )
       $cookies.set("token", response.data.token )
+
+      const userRes = await axios.get(import.meta.env.VITE_BASE_API_URL + "/whoami", 
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${response.data.token}`,
+        }
+      }
+      )
+
+      if ( userRes.status !== 200 ) {
+        catchError(userRes)
+      }
+
+      authStore.setUser(userRes.data)
+      router.push('/')
+      
   } catch (error) {
     console.error("Unable to connect : " + error);
     
   }
-    }
+}
 </script>
 
 <style lang="scss">

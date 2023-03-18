@@ -61,9 +61,18 @@ router.beforeEach(async (to, from) => {
     // make sure the user is authenticated
     !$cookies.get("token") &&
     // ❗️ Avoid an infinite redirect
-    to.name !== 'Login'
+    to.name !== 'login'
   ) {
-    return { name: 'Login' }
+    return '/login'
+  }
+
+  if (
+    // make sure the user is authenticated
+    $cookies.get("token") &&
+    // ❗️ Avoid an infinite redirect
+    to.name === 'login'
+  ) {
+    return false
   }
 })
 
