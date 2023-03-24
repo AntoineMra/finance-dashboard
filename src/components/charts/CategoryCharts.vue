@@ -9,7 +9,7 @@ import { reactive } from "vue";
 import BarChart from "./BarChart.vue";
 
 interface chartData {
-  chartData: object;
+  chartData: {};
   chartOptions?: object;
 }
 

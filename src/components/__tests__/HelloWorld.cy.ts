@@ -1,3 +1,4 @@
+//@ts-nocheck
 import HelloWorld from "../HelloWorld.vue";
 
 describe("HelloWorld", () => {

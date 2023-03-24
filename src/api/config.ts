@@ -1,4 +1,5 @@
 import axios from "axios";
+//@ts-ignore
 const token = $cookies.get("token");
 
 export const instance = axios.create({
@@ -31,6 +32,7 @@ export function generateApiParams(filters: Filters): string {
 
 export function catchError(response: any) {
   if (response.status === 401) {
+    //@ts-ignore
     $cookies.remove("token");
   }
   throw new Error(response.statusText);
