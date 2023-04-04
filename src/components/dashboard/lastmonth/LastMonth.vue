@@ -21,27 +21,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { onBeforeMount, ref } from "vue";
 import LastRecap from "./LastRecap.vue";
 import LastTransac from "./LastTransac.vue";
+import type { Budget } from "@/interface/api";
+import { instance } from "@/api/config";
 
-const lastBudget = ref({});
+const lastBudget = ref<Budget | null>(null);
 
 const getLastBudget = async () => {
-  const searchLast = await fetch(
-    import.meta.env.VITE_API_BASE_URL + "/budgets"
+  const response = await instance.get<Budget[]>(
+    "/budgets?order%5BcreatedAt%5D=desc"
   );
-  const searchRes = await searchLast.json();
-  const last = await fetch(
-    import.meta.env.VITE_API_BASE_URL +
-      "/budgets/" +
-      searchRes["hydra:member"].id
-  );
-  const res = await last.json();
-  lastBudget.value = res["hydra:member"];
+  response.data.slice(1).forEach((budget) => {
+    lastBudget.value = budget;
+  });
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   getLastBudget();
 });
 </script>

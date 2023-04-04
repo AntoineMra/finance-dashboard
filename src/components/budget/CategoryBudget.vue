@@ -29,6 +29,7 @@ const emit = defineEmits(["category"]); */
 
 let categories = ref<Category[]>([]);
 console.log(categories);
+const labels = ["Besoin", "Plaisir", "Dépenses courantes"];
 
 const datasets: dataset[] = [
   {
@@ -54,7 +55,7 @@ const options: Record<string, any> = {
 };
 
 onMounted(() => {
-  fetch("http://localhost:7000/api/categories")
+  /* fetch("http://localhost:7000/api/categories")
     .then((res) => {
       return res.json();
     })
@@ -79,7 +80,7 @@ onMounted(() => {
     })
     .catch(() => {
       console.warn("DB could not be reached");
-    });
+    }); */
 });
 </script>
 

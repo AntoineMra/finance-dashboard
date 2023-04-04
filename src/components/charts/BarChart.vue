@@ -10,6 +10,7 @@
 </template>
 
 <script setup lang="ts">
+//@ts-nocheck
 import { Bar } from "vue-chartjs";
 import {
   Chart as ChartJS,
