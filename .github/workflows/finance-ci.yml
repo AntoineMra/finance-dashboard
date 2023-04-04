@@ -19,7 +19,7 @@ jobs:
         node-version: 16.X
         cache: 'npm'
     - run: npm install
-    - run: npm run lint
+    - run: npm run ci:lint
     - run: npm run type-check
     #- run: npm run test:e2e
     - run: npm run build
