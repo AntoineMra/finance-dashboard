@@ -50,19 +50,25 @@
 
 <script setup lang="ts">
 import { instance, catchError } from "@/api/config";
+import { useAuthStore } from "@/stores/user";
 import CardBudget from "@/components/budget/CardBudget.vue";
 import { ref, onBeforeMount } from "vue";
 
 let budgets = ref<[]>([]);
+const authStore = useAuthStore();
 
 const getBudgets = async () => {
   const response = await instance.get("/budgets");
-  if (response.status !== 200) catchError(response);
+  if (response.status === 401) {
+    authStore.resetToken();
+    authStore.setLoggedIn(false);
+    catchError(response);
+  }
   budgets.value = response.data;
 };
 
 const selectBudget = () => {
-  // Selection
+  console.log("selectBudget");
 };
 
 onBeforeMount(async () => {

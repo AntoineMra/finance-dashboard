@@ -1,6 +1,4 @@
 import axios from "axios";
-import { useAuthStore } from "@/stores/user";
-const userStore = useAuthStore();
 import router from "@/router/index";
 
 //@ts-ignore
@@ -38,8 +36,6 @@ export function catchError(response: any) {
   if (response.status === 401) {
     //@ts-ignore
     $cookies.remove("token");
-    userStore.resetToken();
-    userStore.setLoggedIn(false);
     router.push("/login");
   }
   throw new Error(response.statusText);

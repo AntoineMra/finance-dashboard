@@ -51,6 +51,7 @@ import { useAuthStore } from "@/stores/user";
 import axios from "axios";
 import { catchError } from "@/api/config";
 import { useRouter } from "vue-router";
+
 const username = ref("");
 const password = ref("");
 const authStore = useAuthStore();
@@ -86,7 +87,9 @@ const login = async () => {
       }
     );
 
-    if (userRes.status !== 200) {
+    if (userRes.status === 401) {
+      authStore.resetToken();
+      authStore.setLoggedIn(false);
       catchError(userRes);
     }
 
