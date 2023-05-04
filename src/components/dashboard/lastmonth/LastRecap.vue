@@ -69,6 +69,12 @@
   </ul>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { Budget } from "@/interface/api";
+
+const props = defineProps<{
+  budget: Budget | null;
+}>();
+</script>
 
 <style scoped></style>

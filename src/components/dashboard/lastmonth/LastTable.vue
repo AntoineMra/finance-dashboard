@@ -33,26 +33,34 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr v-for="transaction in transactions" :key="transaction.id">
               <td
                 class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
               >
-                <p class="text-gray-900 whitespace-no-wrap">date</p>
+                <p class="text-gray-900 whitespace-no-wrap">
+                  {{ transaction.date }}
+                </p>
               </td>
               <td
                 class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
               >
-                <p class="text-gray-900 whitespace-no-wrap">description</p>
+                <p class="text-gray-900 whitespace-no-wrap">
+                  {{ transaction.label }}
+                </p>
               </td>
               <td
                 class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
               >
-                <p class="text-gray-900 whitespace-no-wrap">amount €</p>
+                <p class="text-gray-900 whitespace-no-wrap">
+                  {{ transaction.amount }} €
+                </p>
               </td>
               <td
                 class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
               >
-                <p class="text-gray-900 whitespace-no-wrap">category.label</p>
+                <p class="text-gray-900 whitespace-no-wrap">
+                  {{ transaction.category }}
+                </p>
               </td>
               <td
                 class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
@@ -64,7 +72,7 @@
                     aria-hidden
                     class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
                   ></span>
-                  <span class="relative">type.label</span>
+                  <span class="relative">{{ transaction.type }}</span>
                 </span>
               </td>
             </tr>
@@ -76,12 +84,12 @@
 </template>
 
 <script setup lang="ts">
-/* const props = defineProps({
-  rows: {
-    type: Number,
-    required: true,
-  },
-}); */
+import type { Transac } from "@/interface/api";
+
+const props = defineProps<{
+  rows: Number | null;
+  transactions: Transac[];
+}>();
 </script>
 
 <style scoped>

@@ -1,7 +1,11 @@
 <template>
   <div class="flex items-center justify-between pb-4">
     <div class="items-center">
-      <select class="p-2 rounded-lg outline-none" v-model="selectedType">
+      <select
+        class="p-2 rounded-lg outline-none"
+        v-model="selectedType"
+        @change="emit('select', selectedType)"
+      >
         <option
           v-for="option in options"
           v-bind:value="option.value"
@@ -27,6 +31,8 @@
         </svg>
         <input
           class="bg-gray-50 outline-none ml-1 block"
+          v-model="search"
+          @input="emit('search', search)"
           type="text"
           placeholder="Search..."
         />
@@ -44,6 +50,12 @@ const options = ref<Record<string, string>[]>([
   { text: "Dépense", value: "expense" },
   { text: "Revenu", value: "income" },
 ]);
+const search = ref<string>("");
+
+const emit = defineEmits<{
+  (e: "select", value: string): void;
+  (e: "search", value: string): void;
+}>();
 </script>
 
 <style scoped>

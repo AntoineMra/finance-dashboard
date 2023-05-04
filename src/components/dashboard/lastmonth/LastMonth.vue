@@ -2,9 +2,9 @@
   <section class="glass">
     <div class="flex justify-between">
       <h2 class="py-8 px-8 text-3xl flex-shrink-0">Mon dernier mois</h2>
-      <LastRecap />
+      <LastRecap :budget="lastBudget" />
     </div>
-    <LastTransac />
+    <LastTransac :budget="lastBudget" />
     <div class="py-2 px-8 flex items-center justify-end">
       <h1>Test affichage : {{ lastBudget }}</h1>
       <router-link to="/budget/{id}/recap" custom v-slot="{ navigate }">
