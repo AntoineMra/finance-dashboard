@@ -39,15 +39,16 @@ import { onBeforeMount, ref } from "vue";
 import LastRecap from "./LastRecap.vue";
 import LastTransac from "./LastTransac.vue";
 import type { Budget } from "@/interface/api";
-import { instance } from "@/api/config";
+import { APISettings, catchError } from "@/api/config";
 
 const lastBudget = ref<Budget | null>(null);
 
 const getLastBudget = async () => {
-  const response = await instance.get<Budget[]>(
-    "/budgets?order%5BcreatedAt%5D=desc"
-  );
-  response.data.slice(1).forEach((budget) => {
+  const res = await fetch(`${APISettings.baseUrl}/budgets?order%5BcreatedAt%5D=desc`,
+  {
+    headers: APISettings.headersJSON
+  })
+  res.data.slice(1).forEach((budget) => {
     lastBudget.value = budget;
   });
 };
