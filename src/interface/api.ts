@@ -1,4 +1,5 @@
 export interface Budget {
+  "@id"?: string;
   id: string;
   title: string;
   date: Date;

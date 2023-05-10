@@ -78,17 +78,22 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { instance } from "../../api/config";
+import { APISettings, catchError } from "@/api/config";
 
 const title = ref<string>("");
 const date = ref<Date>();
 
-const createBudget = () => {
+const createBudget = async () => {
   const data = {
     title: title.value,
     date: date.value,
   };
-  instance.post("/budget", data);
+  const res = await fetch(`${APISettings.baseUrl}/budgets`,
+  {
+    method: "POST",
+    headers: APISettings.headersJSON,
+    body: JSON.stringify(data)
+  })
   console.log("Create Budget");
 };
 </script>

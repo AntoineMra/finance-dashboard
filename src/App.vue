@@ -1,26 +1,19 @@
 <script setup lang="ts">
 import AppNavigation from "./components/layouts/AppNavigation.vue";
+import { useAuthStore } from "@/stores/user";
 
-const isLogged = () => {
-  // @ts-ignore
-  // eslint-disable-next-line no-undef
-  if (!$cookies.get("token")) {
-    return false;
-  }
-
-  return true;
-};
+const userStore = useAuthStore();
 </script>
 
 <template>
-  <main>
-    <app-navigation v-if="isLogged()" />
+  <main :class="userStore.isLoggedIn ? 'margin' : ''">
+    <app-navigation v-if="userStore.isLoggedIn" />
     <router-view />
   </main>
 </template>
 
-<style lang="scss">
-#app {
+<style lang="scss" scoped>
+.margin {
   margin-left: 13rem;
   min-height: 100vh;
 }
