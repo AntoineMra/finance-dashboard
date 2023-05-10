@@ -83,7 +83,7 @@ import { APISettings, catchError } from "@/api/config";
 const title = ref<string>("");
 const date = ref<Date>();
 
-const createBudget = () => {
+const createBudget = async () => {
   const data = {
     title: title.value,
     date: date.value,
@@ -92,7 +92,7 @@ const createBudget = () => {
   {
     method: "POST",
     headers: APISettings.headersJSON,
-    body: data
+    body: JSON.stringify(data)
   })
   console.log("Create Budget");
 };

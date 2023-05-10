@@ -88,7 +88,7 @@ import type { Transac } from "@/interface/api";
 
 const props = defineProps<{
   rows: Number | null;
-  transactions: Transac[];
+  transactions: Transac[] | undefined;
 }>();
 </script>
 

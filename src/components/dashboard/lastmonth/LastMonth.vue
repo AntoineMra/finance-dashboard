@@ -48,7 +48,8 @@ const getLastBudget = async () => {
   {
     headers: APISettings.headersJSON
   })
-  res.data.slice(1).forEach((budget) => {
+  const data = await res.json();
+  data.slice(1).forEach((budget: Budget) => {
     lastBudget.value = budget;
   });
 };
