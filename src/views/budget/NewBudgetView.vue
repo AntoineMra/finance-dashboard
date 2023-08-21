@@ -83,7 +83,7 @@ import { getInstance } from "@/api/axios";
 const title = ref<string>("");
 const date = ref<Date>();
 
-const createBudget = () => {
+const createBudget = async () => {
   const data = {
     title: title.value,
     date: date.value,

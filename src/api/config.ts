@@ -5,17 +5,19 @@ interface Filters {
 }
 
 export function generateApiParams(filters: Filters): string {
-  let params = "";
-  Object.keys(filters).forEach((key) => {
-    const value = filters[key];
-    if (value !== undefined && value !== null) {
-      params += `&${key}=${encodeURIComponent(String(value))}`;
-    }
-  });
-  if (params !== "") {
-    params = "?" + params.slice(1);
-  }
-  return params;
+  //@ts-ignore
+  const params = Object.entries(filters)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .filter(
+      ([key, value]: [string, any]) => value !== undefined && value !== null
+    )
+    .map(
+      ([key, value]: [string, any]) =>
+        `${key}=${encodeURIComponent(String(value))}`
+    )
+    .join("&");
+
+  return params ? `?${params}` : "";
 }
 
 export function catchError(response: any) {
