@@ -78,7 +78,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { instance } from "../../api/config";
+import { getInstance } from "@/api/axios";
 
 const title = ref<string>("");
 const date = ref<Date>();
@@ -88,6 +88,7 @@ const createBudget = () => {
     title: title.value,
     date: date.value,
   };
+  const instance = getInstance();
   instance.post("/budget", data);
   console.log("Create Budget");
 };

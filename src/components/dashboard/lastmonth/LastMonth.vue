@@ -6,7 +6,7 @@
     </div>
     <LastTransac :budget="lastBudget" />
     <div class="py-2 px-8 flex items-center justify-end">
-      <h1>Test affichage : {{ lastBudget.transactions }}</h1>
+      <h1>Test affichage : {{ lastBudget }}</h1>
       <router-link to="/budget/{id}/recap" custom v-slot="{ navigate }">
         <button
           @click="navigate"
@@ -39,17 +39,26 @@ import { onBeforeMount, ref } from "vue";
 import LastRecap from "./LastRecap.vue";
 import LastTransac from "./LastTransac.vue";
 import type { Budget } from "@/interface/api";
-import { instance } from "@/api/config";
+import { getInstance } from "@/api/axios";
+import { catchError } from "@/api/config";
 
 const lastBudget = ref<Budget | null>(null);
 
 const getLastBudget = async () => {
-  const response = await instance.get<Budget[]>(
-    "/budgets?order%5BcreatedAt%5D=desc"
-  );
-  response.data.slice(1).forEach((budget) => {
-    lastBudget.value = budget;
-  });
+  const instance = getInstance();
+  try {
+    const response = await instance.get<Budget[]>(
+      "/budgets?order%5BcreatedAt%5D=desc"
+    );
+
+    response.data.slice(1).forEach((budget) => {
+      lastBudget.value = budget;
+    });
+  } catch (error: any) {
+    if (error.response.status === 401) {
+      catchError(error.response);
+    }
+  }
 };
 
 onBeforeMount(() => {

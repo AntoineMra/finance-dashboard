@@ -14,6 +14,6 @@ describe("Login Component Testing", () => {
     cy.get("input[type=password]").type("testing");
     cy.get("button[type=submit]").click();
     cy.url().should("include", "/");
-    //cy.getCookie("token").should("exist");
+    cy.getCookie("token");
   });
 });

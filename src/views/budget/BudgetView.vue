@@ -49,21 +49,25 @@
 </template>
 
 <script setup lang="ts">
-import { instance, catchError } from "@/api/config";
+import { catchError } from "@/api/config";
 import { useAuthStore } from "@/stores/user";
 import CardBudget from "@/components/budget/CardBudget.vue";
 import { ref, onBeforeMount } from "vue";
+import { getInstance } from "@/api/axios";
 
 let budgets = ref<[]>([]);
 const authStore = useAuthStore();
 
 const getBudgets = async () => {
+  const instance = getInstance();
   const response = await instance.get("/budgets");
+
   if (response.status === 401) {
     authStore.resetToken();
     authStore.setLoggedIn(false);
     catchError(response);
   }
+
   budgets.value = response.data;
 };
 
