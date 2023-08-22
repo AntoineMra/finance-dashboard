@@ -23,10 +23,20 @@ Année
 import type { dataset } from "@/interface/charts";
 import { ref } from "vue";
 import MediumCharts from "../../charts/MediumCharts.vue";
+import { getInstance } from "@/api/axios";
 
 const props = defineProps({
   transacType: { type: String, required: true },
 });
+
+let budgets = ref<[]>([]);
+
+const getBudgets = async () => {
+  const instance = getInstance();
+  const response = await instance.get("/budgets");
+
+  budgets.value = response.data;
+};
 
 let medium = ref<string>("Année " + 500);
 

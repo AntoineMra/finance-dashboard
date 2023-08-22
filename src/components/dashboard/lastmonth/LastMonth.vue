@@ -6,8 +6,11 @@
     </div>
     <LastTransac :budget="lastBudget" />
     <div class="py-2 px-8 flex items-center justify-end">
-      <h1>Test affichage : {{ lastBudget }}</h1>
-      <router-link to="/budget/{id}/recap" custom v-slot="{ navigate }">
+      <router-link
+        :to="`/budget/${lastBudget.id}/recap`"
+        custom
+        v-slot="{ navigate }"
+      >
         <button
           @click="navigate"
           type="button"

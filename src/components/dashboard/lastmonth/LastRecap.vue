@@ -75,6 +75,8 @@ import type { Budget } from "@/interface/api";
 const props = defineProps<{
   budget: Budget | null;
 }>();
+
+//Waiting for the api to deliver the 4 stats
 </script>
 
 <style scoped></style>
