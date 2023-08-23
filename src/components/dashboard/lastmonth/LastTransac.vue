@@ -18,8 +18,9 @@ const transactions = ref<Transac[] | undefined>();
 
 const getTransactions = (filter = null) => {
   if (filter) {
-    //todo implement filter
+    //TODO Implement search Filter and Type filter
   }
+
   transactions.value = props.budget?.transactions;
 };
 
@@ -34,7 +35,6 @@ const onSearch = (value: string) => {
 onBeforeMount(() => {
   getTransactions();
 });
-
 </script>
 
 <style scoped></style>

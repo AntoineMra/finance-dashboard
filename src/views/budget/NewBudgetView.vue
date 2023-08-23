@@ -78,7 +78,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { APISettings, catchError } from "@/api/config";
+import { getInstance } from "@/api/axios";
 
 const title = ref<string>("");
 const date = ref<Date>();
@@ -88,12 +88,8 @@ const createBudget = async () => {
     title: title.value,
     date: date.value,
   };
-  const res = await fetch(`${APISettings.baseUrl}/budgets`,
-  {
-    method: "POST",
-    headers: APISettings.headersJSON,
-    body: JSON.stringify(data)
-  })
+  const instance = getInstance();
+  instance.post("/budget", data);
   console.log("Create Budget");
 };
 </script>

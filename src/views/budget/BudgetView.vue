@@ -49,27 +49,26 @@
 </template>
 
 <script setup lang="ts">
-import { APISettings, catchError } from "@/api/config";
+import { catchError } from "@/api/config";
 import { useAuthStore } from "@/stores/user";
 import CardBudget from "@/components/budget/CardBudget.vue";
 import { ref, onBeforeMount } from "vue";
+import { getInstance } from "@/api/axios";
 
 let budgets = ref<[]>([]);
 const authStore = useAuthStore();
 
 const getBudgets = async () => {
-  const res = await fetch(`${APISettings.baseUrl}/budgets`,
-  {
-    headers: APISettings.headersJSON
-  })
+  const instance = getInstance();
+  const response = await instance.get("/budgets");
 
-  if (res.ok) {
-      const data = await res.json();
-      budgets.value = data;
-    } else {
-      catchError(res);
-      throw new Error(`Failed to fetch budgets: ${res.statusText}`);
-    }
+  if (response.status === 401) {
+    authStore.resetToken();
+    authStore.setLoggedIn(false);
+    catchError(response);
+  }
+
+  budgets.value = response.data;
 };
 
 const selectBudget = () => {

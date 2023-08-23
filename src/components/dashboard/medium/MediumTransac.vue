@@ -21,14 +21,32 @@ Année
 
 <script setup lang="ts">
 import type { dataset } from "@/interface/charts";
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import MediumCharts from "../../charts/MediumCharts.vue";
+import { getInstance } from "@/api/axios";
 
 const props = defineProps({
   transacType: { type: String, required: true },
 });
 
+let budgets = ref<[]>([]);
 let medium = ref<string>("Année " + 500);
+
+const getBudgets = async () => {
+  const instance = getInstance();
+  const response = await instance.get("/budgets");
+  const budgets = response.data;
+
+  budgets.value = budgets.map((budget: any) => {
+    //TODO must be filtered with the transacType
+    return budget.totalTransactions;
+  });
+};
+
+const getMediumValue = () => {
+  //TODO: To be calculate with values
+};
+
 
 function reset() {
   medium.value = "Année " + 500;
@@ -50,13 +68,15 @@ const labels: string[] = [
   "Novembre",
   "Décembre",
 ];
+
 const datasets: dataset[] = [
   {
     label: "Moyenne des " + props.transacType,
     backgroundColor: "#a855f7",
-    data: [512, 788, 621],
+    data: budgets.value,
   },
 ];
+
 const options: Record<string, any> = {
   responsive: true,
   tension: 0.4,
@@ -106,6 +126,10 @@ const options: Record<string, any> = {
     },
   },
 };
+
+onBeforeMount(async () => {
+  getBudgets();
+});
 </script>
 
 <style lang="scss" scoped></style>
