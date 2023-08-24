@@ -2,9 +2,9 @@
   <section class="glass" v-if="lastBudget">
     <div class="flex justify-between">
       <h2 class="py-8 px-8 text-3xl flex-shrink-0">Mon dernier mois</h2>
-      <LastRecap :budget="lastBudget" />
+      <last-recap :budget="lastBudget" />
     </div>
-    <LastTransac :budget="lastBudget" />
+    <last-transac :budget="lastBudget" />
     <div class="py-2 px-8 flex items-center justify-end">
       <router-link
         :to="`/budget/${lastBudget.id}/recap`"
