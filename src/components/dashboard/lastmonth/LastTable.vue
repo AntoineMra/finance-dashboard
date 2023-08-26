@@ -83,16 +83,20 @@
 
 <script setup lang="ts">
 import type { Transac } from "@/interface/api";
-import { onBeforeMount } from "vue";
+import { onBeforeMount, ref } from "vue";
 
 const props = defineProps<{
   rows: number | null;
   transactions: Transac[] | undefined;
 }>();
 
+let limitedTransactions = ref<Transac[]>([]);
+
 const limitTransactions = () => {
+  limitedTransactions.value = props.transactions ?? [];
+
   if (props.transactions && props.rows) {
-    return props.transactions.slice(0, props.rows);
+    limitedTransactions.value = props.transactions.slice(0, props.rows);
   }
 };
 

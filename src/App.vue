@@ -1,16 +1,38 @@
-<script setup lang="ts">
-import AppNavigation from "./components/layouts/AppNavigation.vue";
-import { useAuthStore } from "@/stores/user";
-
-const userStore = useAuthStore();
-</script>
-
 <template>
   <main :class="userStore.isLoggedIn ? 'margin' : ''">
     <app-navigation v-if="userStore.isLoggedIn" />
     <router-view />
   </main>
 </template>
+
+<script setup lang="ts">
+import AppNavigation from "./components/layouts/AppNavigation.vue";
+import { useAuthStore } from "@/stores/user";
+import { onBeforeMount } from "vue";
+import { handleExpiredToken } from "./api/config";
+import { getInstance } from "./api/axios";
+
+const userStore = useAuthStore();
+
+const getUser = async () => {
+  const instance = getInstance();
+
+  try {
+    const response = await instance.get("/budgets?status=completed");
+    userStore.setUser(response.data);
+  } catch (error: any) {
+    if (error.response.status === 401) {
+      userStore.resetToken();
+      userStore.setLoggedIn(false);
+      handleExpiredToken();
+    }
+  }
+};
+
+onBeforeMount(() => {
+  getUser();
+});
+</script>
 
 <style lang="scss" scoped>
 .margin {

@@ -43,7 +43,7 @@ import LastRecap from "./LastRecap.vue";
 import LastTransac from "./LastTransac.vue";
 import type { Budget } from "@/interface/api";
 import { getInstance } from "@/api/axios";
-import { catchError } from "@/api/config";
+import { handleExpiredToken } from "@/api/config";
 
 const lastBudget = ref<Budget | null>(null);
 
@@ -59,7 +59,7 @@ const getLastBudget = async () => {
     });
   } catch (error: any) {
     if (error.response.status === 401) {
-      catchError(error.response);
+      handleExpiredToken();
     }
   }
 };

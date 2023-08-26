@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { catchError } from "@/api/config";
+import { handleExpiredToken } from "@/api/config";
 import { useAuthStore } from "@/stores/user";
 import CardBudget from "@/components/budget/CardBudget.vue";
 import LastTable from "@/components/dashboard/lastmonth/LastTable.vue";
@@ -65,17 +65,15 @@ const getBudgets = async () => {
   const instance = getInstance();
 
   try {
-    const response = await instance.get("/budgets");
+    const response = await instance.get("/budgets?status=completed");
     budgets.value = response.data;
   } catch (error: any) {
     if (error.response.status === 401) {
       authStore.resetToken();
       authStore.setLoggedIn(false);
-      catchError(error.response);
+      handleExpiredToken();
     }
   }
-
-  //const response = await instance.get("/budgets?status=completed");
 };
 
 const selectBudget = (budgetId: string) => {

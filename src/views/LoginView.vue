@@ -49,7 +49,7 @@
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/user";
 import axios from "axios";
-import { catchError } from "@/api/config";
+import { handleExpiredToken } from "@/api/config";
 import { useRouter } from "vue-router";
 
 const username = ref("");
@@ -90,7 +90,7 @@ const login = async () => {
     if (userRes.status === 401) {
       authStore.resetToken();
       authStore.setLoggedIn(false);
-      catchError(userRes);
+      handleExpiredToken();
     }
 
     authStore.setUser(userRes.data);
