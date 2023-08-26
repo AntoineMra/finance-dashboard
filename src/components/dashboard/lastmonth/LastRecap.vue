@@ -1,7 +1,7 @@
 <template>
   <ul class="flex flex-wrap items-center justify-between w-full px-8 max-w-xl">
     <li class="flex items-center justify-center text-2xl">
-      180€
+      {{ budget?.transactionsTotalExpense }}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6 ml-2 stroke-red-600"
@@ -18,7 +18,7 @@
       </svg>
     </li>
     <li class="flex items-center justify-center text-2xl">
-      280€
+      {{ budget?.transactionsTotalIncome }}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6 ml-2 stroke-green-700"
@@ -35,10 +35,15 @@
       </svg>
     </li>
     <li class="flex items-center justify-center text-2xl">
-      100€
+      {{ budget?.transactionsDifferential }}
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6 ml-2 fill-green-700"
+        class="h-6 w-6 ml-2"
+        :class="
+          budget?.transactionsDifferential ?? 0 > 0
+            ? 'fill-green-700'
+            : 'fill-red-600'
+        "
         viewBox="0 0 20 20"
         fill="currentColor"
       >
@@ -50,7 +55,7 @@
       </svg>
     </li>
     <li class="flex items-center justify-center text-2xl">
-      42%
+      {{ budget?.transactionsDifferential + "%" }}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6 ml-2 stroke-green-700"

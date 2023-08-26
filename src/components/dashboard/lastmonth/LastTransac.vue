@@ -8,16 +8,13 @@
 <script setup lang="ts">
 import LastTableHeader from "./LastTableHeader.vue";
 import LastTable from "./LastTable.vue";
-import type { Budget, Category, Transac } from "@/interface/api";
+import type { Budget, Transac } from "@/interface/api";
 import { onBeforeMount, ref } from "vue";
-import { getInstance } from "@/api/axios";
-import { handleExpiredToken } from "@/api/config";
 
 const props = defineProps<{
   budget: Budget | null;
 }>();
 const transactions = ref<Transac[] | undefined>();
-const categories = ref<Category[] | undefined>();
 
 const getTransactions = (filter = null) => {
   if (filter) {
@@ -25,19 +22,6 @@ const getTransactions = (filter = null) => {
   }
 
   transactions.value = props.budget?.transactions;
-};
-
-const getCategories = async () => {
-  const instance = getInstance();
-  try {
-    const response = await instance.get<Category[]>("/categories");
-
-    categories.value = response.data;
-  } catch (error: any) {
-    if (error.response.status === 401) {
-      handleExpiredToken();
-    }
-  }
 };
 
 const onSelect = (value: string) => {
@@ -50,7 +34,6 @@ const onSearch = (value: string) => {
 
 onBeforeMount(() => {
   getTransactions();
-  getCategories();
 });
 </script>
 
