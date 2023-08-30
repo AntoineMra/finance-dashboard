@@ -12,14 +12,16 @@ import { onBeforeMount } from "vue";
 import { handleExpiredToken } from "./api/config";
 import { getInstance } from "./api/axios";
 
+// eslint-disable-next-line no-undef
 const userStore = useAuthStore();
 
 const getUser = async () => {
   const instance = getInstance();
 
   try {
-    const response = await instance.get("/budgets?status=completed");
+    const response = await instance.get("/whoami");
     userStore.setUser(response.data);
+    userStore.setLoggedIn(true);
   } catch (error: any) {
     if (error.response.status === 401) {
       userStore.resetToken();

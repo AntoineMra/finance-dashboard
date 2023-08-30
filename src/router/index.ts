@@ -7,6 +7,7 @@ import ExpenseForm from "@/components/budget/forms/ExpenseForm.vue";
 import IncomeForm from "@/components/budget/forms/IncomeForm.vue";
 import GoalsView from "@/views/goals/GoalsView.vue";
 import InvestView from "@/views/invest/InvestView.vue";
+import BudgetRecapView from "@/views/budget/BudgetRecapView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,6 +26,11 @@ const router = createRouter({
       path: "/budget",
       name: "budget",
       component: BudgetView,
+    },
+    {
+      path: "/budget/:id/recap",
+      name: "budgetRecap",
+      component: BudgetRecapView,
     },
     {
       path: "/budget/new",

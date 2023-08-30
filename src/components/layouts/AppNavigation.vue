@@ -104,6 +104,31 @@
             <span class="ml-2 text-lg text-slate-500">Objectifs</span>
           </router-link>
         </li>
+
+        <li class="py-4">
+          <router-link
+            :active-class="'isActive'"
+            to="/goals"
+            class="flex text-slate-400 hover:text-slate-500 transition-colors"
+            data-cy="nav-goals"
+          >
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M2.25 6L9 12.75l4.286-4.286a11.948 11.948 0 014.306 6.43l.776 2.898m0 0l3.182-5.511m-3.182 5.51l-5.511-3.181"
+              ></path>
+            </svg>
+            <span class="ml-2 text-lg text-slate-500">Paramètres</span>
+          </router-link>
+        </li>
       </ul>
 
       <p class="text-gray-700 mb-8">
