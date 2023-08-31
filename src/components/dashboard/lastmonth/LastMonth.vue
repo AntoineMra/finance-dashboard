@@ -2,9 +2,9 @@
   <section class="glass" v-if="lastBudget">
     <div class="flex justify-between">
       <h2 class="py-8 px-8 text-3xl flex-shrink-0">Mon dernier mois</h2>
-      <LastRecap :budget="lastBudget" />
+      <last-recap :budget="lastBudget" />
     </div>
-    <LastTransac :budget="lastBudget" />
+    <last-transac :budget="lastBudget" />
     <div class="py-2 px-8 flex items-center justify-end">
       <router-link
         :to="`/budget/${lastBudget.id}/recap`"
@@ -43,7 +43,7 @@ import LastRecap from "./LastRecap.vue";
 import LastTransac from "./LastTransac.vue";
 import type { Budget } from "@/interface/api";
 import { getInstance } from "@/api/axios";
-import { catchError } from "@/api/config";
+import { handleExpiredToken } from "@/api/config";
 
 const lastBudget = ref<Budget | null>(null);
 
@@ -59,7 +59,7 @@ const getLastBudget = async () => {
     });
   } catch (error: any) {
     if (error.response.status === 401) {
-      catchError(error.response);
+      handleExpiredToken();
     }
   }
 };

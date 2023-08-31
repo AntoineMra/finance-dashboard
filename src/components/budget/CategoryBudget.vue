@@ -28,7 +28,6 @@ import type { Category } from "@/interface/api";
 const emit = defineEmits(["category"]); */
 
 let categories = ref<Category[]>([]);
-console.log(categories);
 const labels = ["Besoin", "Plaisir", "Dépenses courantes"];
 
 const datasets: dataset[] = [

@@ -1,7 +1,7 @@
 <template>
   <div class="p-8 pb-2 w-full">
-    <LastTableHeader @select="onSelect" @search="onSearch"/>
-    <LastTable :rows="5" :transactions="transactions" />
+    <last-table-header @select="onSelect" @search="onSearch" />
+    <last-table :rows="5" :transactions="transactions" />
   </div>
 </template>
 

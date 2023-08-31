@@ -1,7 +1,7 @@
 <template>
   <ul class="flex flex-wrap items-center justify-between w-full px-8 max-w-xl">
     <li class="flex items-center justify-center text-2xl">
-      180€
+      {{ budget?.transactionsTotalExpense }}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6 ml-2 stroke-red-600"
@@ -18,7 +18,7 @@
       </svg>
     </li>
     <li class="flex items-center justify-center text-2xl">
-      280€
+      {{ budget?.transactionsTotalIncome }}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6 ml-2 stroke-green-700"
@@ -35,22 +35,40 @@
       </svg>
     </li>
     <li class="flex items-center justify-center text-2xl">
-      100€
+      {{ budget?.transactionsDifferential }}
       <svg
+        fill="none"
+        :class="'stroke-green-700'"
+        stroke="currentColor"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6 ml-2 fill-green-700"
-        viewBox="0 0 20 20"
-        fill="currentColor"
+        aria-hidden="true"
       >
         <path
-          fill-rule="evenodd"
-          d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
-          clip-rule="evenodd"
-        />
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"
+        ></path>
+      </svg>
+      <svg
+        fill="none"
+        :class="'stroke-red-600'"
+        stroke="currentColor"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M2.25 6L9 12.75l4.286-4.286a11.948 11.948 0 014.306 6.43l.776 2.898m0 0l3.182-5.511m-3.182 5.51l-5.511-3.181"
+        ></path>
       </svg>
     </li>
     <li class="flex items-center justify-center text-2xl">
-      42%
+      {{ budget?.transactionsDifferential + "%" }}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6 ml-2 stroke-green-700"
@@ -75,8 +93,6 @@ import type { Budget } from "@/interface/api";
 const props = defineProps<{
   budget: Budget | null;
 }>();
-
-//Waiting for the api to deliver the 4 stats
 </script>
 
 <style scoped></style>

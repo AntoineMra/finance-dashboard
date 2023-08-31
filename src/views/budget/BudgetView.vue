@@ -33,15 +33,17 @@
           :index="index"
           :amountExpense="450"
           :amountIncome="350"
-          :key="budget"
+          :key="budget.id"
           @select="selectBudget"
         />
       </div>
 
-      <section>
-        <h2 class="text-3xl font-bold">Liste de toutes les transactions</h2>
-        <div class="w-full flex items-stretch justify-start flex-wrap">
-          <div class="basis-1/4">tbd</div>
+      <section v-if="transactions.length">
+        <h2 class="pl-12 text-3xl font-bold">
+          Liste de toutes les transactions
+        </h2>
+        <div class="w-full flex items-stretch justify-center flex-wrap">
+          <last-table :rows="null" :transactions="transactions" />
         </div>
       </section>
     </section>
@@ -49,33 +51,40 @@
 </template>
 
 <script setup lang="ts">
-import { catchError } from "@/api/config";
+import { handleExpiredToken } from "@/api/config";
 import { useAuthStore } from "@/stores/user";
 import CardBudget from "@/components/budget/CardBudget.vue";
+import LastTable from "@/components/dashboard/lastmonth/LastTable.vue";
 import { ref, onBeforeMount } from "vue";
 import { getInstance } from "@/api/axios";
+import type { Budget, Transac } from "@/interface/api";
 
-let budgets = ref<[]>([]);
+let budgets = ref<Budget[]>([]);
+let transactions = ref<Transac[]>([]);
 const authStore = useAuthStore();
 
 const getBudgets = async () => {
   const instance = getInstance();
-  const response = await instance.get("/budgets");
 
-  if (response.status === 401) {
-    authStore.resetToken();
-    authStore.setLoggedIn(false);
-    catchError(response);
+  try {
+    const response = await instance.get("/budgets?status=completed");
+    budgets.value = response.data;
+  } catch (error: any) {
+    if (error.response.status === 401) {
+      authStore.resetToken();
+      authStore.setLoggedIn(false);
+      handleExpiredToken();
+    }
   }
-
-  budgets.value = response.data;
 };
 
-const selectBudget = () => {
-  console.log("selectBudget");
+const selectBudget = (budgetId: string) => {
+  const budget = budgets.value.find((budget: Budget) => budget.id === budgetId);
+
+  transactions.value = budget ? budget.transactions : [];
 };
 
-onBeforeMount(async () => {
+onBeforeMount(() => {
   getBudgets();
 });
 </script>
@@ -84,14 +93,5 @@ onBeforeMount(async () => {
 .budget {
   min-height: 100vh;
   background-color: rgb(255, 255, 255);
-}
-
-.glass {
-  background: rgba(182, 182, 182, 0.35);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 2px solid rgba(182, 182, 182, 0.3);
 }
 </style>

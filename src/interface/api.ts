@@ -7,9 +7,14 @@ export interface Budget {
   status: string;
   transactions: Transac[];
   createdAt?: Date;
+  transactionsTotalExpense?: number;
+  transactionsTotalIncome?: number;
+  transactionsPercent?: number;
+  transactionsDifferential?: number;
 }
 
 export interface Category {
+  "@id"?: string;
   id: string;
   label: string;
   domain: Domain;
@@ -21,7 +26,7 @@ export interface Transac {
   label: string;
   amount: number;
   type: TransacType;
-  category: Category;
+  category: string;
 }
 
 export interface Domain {
