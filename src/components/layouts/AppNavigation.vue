@@ -123,10 +123,36 @@
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                d="M2.25 6L9 12.75l4.286-4.286a11.948 11.948 0 014.306 6.43l.776 2.898m0 0l3.182-5.511m-3.182 5.51l-5.511-3.181"
+                d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
               ></path>
             </svg>
             <span class="ml-2 text-lg text-slate-500">Paramètres</span>
+          </router-link>
+        </li>
+
+        <li class="py-4 pt-32">
+          <router-link
+            :active-class="'isActive'"
+            to="/login"
+            class="flex text-slate-400 hover:text-slate-500 transition-colors p-2"
+            data-cy="nav-goals"
+            @click="logout"
+          >
+            <svg
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
+              ></path>
+            </svg>
+            <span class="ml-2 text-sm text-slate-500">Déconnexion</span>
           </router-link>
         </li>
       </ul>
@@ -142,7 +168,13 @@
   </nav>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const logout = () => {
+  //@ts-ignore
+  // eslint-disable-next-line no-undef
+  $cookies.remove("token");
+};
+</script>
 
 <style lang="scss" scoped>
 .isActive {
