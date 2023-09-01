@@ -99,7 +99,7 @@
 
 <script setup lang="ts">
 import { getInstance } from "@/api/axios";
-import type { Category, Transac } from "@/interface/api";
+import type { Category, Transaction } from "@/interface/api";
 import { onBeforeMount, ref } from "vue";
 import { handleExpiredToken } from "@/api/config";
 
@@ -107,10 +107,10 @@ const categories = ref<Category[] | undefined>();
 
 const props = defineProps<{
   rows: number | null;
-  transactions: Transac[] | undefined;
+  transactions: Transaction[] | undefined;
 }>();
 
-let limitedTransactions = ref<Transac[]>([]);
+let limitedTransactions = ref<Transaction[]>([]);
 
 const limitTransactions = () => {
   limitedTransactions.value = props.transactions ?? [];

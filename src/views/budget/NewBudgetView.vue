@@ -3,7 +3,7 @@
     <section class="glass py-8 pl-8 pb-16">
       <header>
         <h2 class="py-8 px-8 text-4xl font-bold flex-shrink-0">
-          Mon prochain budget
+          Mon nouveau budget
         </h2>
         <nav class="flex">
           <router-link
@@ -79,61 +79,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { getInstance } from "@/api/axios";
+import type { Budget } from "@/interface/api";
 
 const title = ref<string>("");
 const date = ref<Date>();
-const fileInput = ref<HTMLInputElement | null>(null);
 
 const createBudget = async () => {
-  const data = {
+  const budget: Partial<Budget> = {
     title: title.value,
     date: date.value,
+    status: "draft",
+    transactions: [],
   };
   const instance = getInstance();
-  instance.post("/budget", data);
-  console.log("Create Budget");
-};
+  instance.post("/budget", budget);
 
-const onFileChange = (e: any) => {
-  fileInput.value = e.target;
-};
-
-const createMediaObject = async () => {
-  let media = null;
-
-  if (fileInput.value?.files?.length) {
-    const response = await postMediaObject(fileInput.value?.files[0]);
-    if (typeof response === "object") {
-      media = response["@id"];
-    } else {
-      fileError.value = response;
-    }
-  }
-}
-
-const postMediaObject = async (fileObject: any) => {
-  const formData = new FormData();
-  formData.append("file", fileObject, fileObject.name);
-
-  const res = await fetch(`${APISettings.baseUrl}/media-objects`, {
-    headers: headers,
-    method: "POST",
-    body: formData,
-  });
-  const response = await instance.post("/media-objects/" + id);
-
-  if (res.status === 401) catchError(res);
-  if (res.status === 422) {
-    const error = await res.json();
-    error.violations.forEach((violation: any) => {
-      if (violation.propertyPath === "file") {
-        return violation.message;
-      }
-    });
-  } else {
-    const media = await res.json();
-    return media;
-  }
+  //TODO should redirect to Budget Extraction View
 };
 
 </script>

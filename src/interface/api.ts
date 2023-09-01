@@ -5,7 +5,7 @@ export interface Budget {
   date: Date;
   formatedDate: string;
   status: string;
-  transactions: Transac[];
+  transactions: Transaction[];
   createdAt?: Date;
   transactionsTotalExpense?: number;
   transactionsTotalIncome?: number;
@@ -20,7 +20,7 @@ export interface Category {
   domain: Domain;
 }
 
-export interface Transac {
+export interface Transaction {
   id: string;
   date?: string;
   label: string;
@@ -54,9 +54,29 @@ export interface Goal {
 }
 
 export interface Support {
-  id: number;
+  id: string;
   name: string;
   type: InvestType;
+}
+
+export interface MediaObject {
+  "@id"?: string;
+  filePath: string;
+  mimeType: string;
+  size: number;
+}
+
+export interface BankExtraction {
+  id: string;
+  month: string;
+  mediaObject: MediaObject;
+  budget: Budget;
+}
+
+export interface BankExtractionResponse {
+  budget: Budget;
+  month: string;
+  transactions: Transaction[];
 }
 
 enum TransacType {

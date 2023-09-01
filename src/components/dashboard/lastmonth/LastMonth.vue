@@ -58,9 +58,7 @@ const getLastBudget = async () => {
       lastBudget.value = budget;
     });
   } catch (error: any) {
-    if (error.response.status === 401) {
-      handleExpiredToken();
-    }
+    if (error.response.status === 401) handleExpiredToken();
   }
 };
 
