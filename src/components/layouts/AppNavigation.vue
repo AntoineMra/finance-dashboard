@@ -108,7 +108,7 @@
         <li class="py-4">
           <router-link
             :active-class="'isActive'"
-            to="/goals"
+            to="/parameters"
             class="flex text-slate-400 hover:text-slate-500 transition-colors"
             data-cy="nav-goals"
           >

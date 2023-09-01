@@ -8,6 +8,7 @@ import IncomeForm from "@/components/budget/forms/IncomeForm.vue";
 import GoalsView from "@/views/goals/GoalsView.vue";
 import InvestView from "@/views/invest/InvestView.vue";
 import BudgetRecapView from "@/views/budget/BudgetRecapView.vue";
+import ParameterView from "@/views/parameters/ParameterView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,6 +59,11 @@ const router = createRouter({
       path: "/goals",
       name: "goals",
       component: GoalsView,
+    },
+    {
+      path: "/parameters",
+      name: "parameters",
+      component: ParameterView,
     },
   ],
 });
