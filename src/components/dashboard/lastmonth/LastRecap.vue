@@ -36,9 +36,11 @@
     </li>
     <li class="flex items-center justify-center text-2xl">
       {{ budget?.transactionsDifferential }}
+      <!-- @vue-ignore -->
       <svg
+        v-if="budget.transactionsDifferential >= 0"
         fill="none"
-        :class="'stroke-green-700'"
+        :class="'stroke-green-700 ml-2 w-5 h-5'"
         stroke="currentColor"
         stroke-width="1.5"
         viewBox="0 0 24 24"
@@ -52,8 +54,9 @@
         ></path>
       </svg>
       <svg
+        v-else
         fill="none"
-        :class="'stroke-red-600'"
+        :class="'stroke-red-600 ml-2 w-5 h-5'"
         stroke="currentColor"
         stroke-width="1.5"
         viewBox="0 0 24 24"

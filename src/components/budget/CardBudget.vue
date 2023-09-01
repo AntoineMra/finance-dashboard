@@ -12,10 +12,10 @@
     </h2>
     <p class="text-center">{{ props.budget.month }} {{ props.budget.year }}</p>
     <div class="flex pt-4 items-center justify-center">
-      <p class="text-2xl font-bold text-red-800 mx-4">
+      <p class="text-xl font-bold text-red-800 mx-2">
         - {{ props.amountExpense }}€
       </p>
-      <p class="text-2xl font-bold text-green-800 mx-4">
+      <p class="text-xl font-bold text-green-800 mx-2">
         + {{ props.amountIncome }}€
       </p>
     </div>
