@@ -82,6 +82,7 @@ import { getInstance } from "@/api/axios";
 
 const title = ref<string>("");
 const date = ref<Date>();
+const fileInput = ref<HTMLInputElement | null>(null);
 
 const createBudget = async () => {
   const data = {
@@ -92,6 +93,49 @@ const createBudget = async () => {
   instance.post("/budget", data);
   console.log("Create Budget");
 };
+
+const onFileChange = (e: any) => {
+  fileInput.value = e.target;
+};
+
+const createMediaObject = async () => {
+  let media = null;
+
+  if (fileInput.value?.files?.length) {
+    const response = await postMediaObject(fileInput.value?.files[0]);
+    if (typeof response === "object") {
+      media = response["@id"];
+    } else {
+      fileError.value = response;
+    }
+  }
+}
+
+const postMediaObject = async (fileObject: any) => {
+  const formData = new FormData();
+  formData.append("file", fileObject, fileObject.name);
+
+  const res = await fetch(`${APISettings.baseUrl}/media-objects`, {
+    headers: headers,
+    method: "POST",
+    body: formData,
+  });
+  const response = await instance.post("/media-objects/" + id);
+
+  if (res.status === 401) catchError(res);
+  if (res.status === 422) {
+    const error = await res.json();
+    error.violations.forEach((violation: any) => {
+      if (violation.propertyPath === "file") {
+        return violation.message;
+      }
+    });
+  } else {
+    const media = await res.json();
+    return media;
+  }
+};
+
 </script>
 
 <style scoped>
