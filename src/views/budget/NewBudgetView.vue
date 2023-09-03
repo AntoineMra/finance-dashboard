@@ -85,7 +85,7 @@ const createBudget = async () => {
   try {
     const response = await instance.post("/budgets", payload);
     const budget = response.data;
-    router.push(`/${budget.id}/extraction`);
+    router.push(`/budget/${budget.id}/extraction`);
   } catch (error: any) {
     errorMessage.value = error.response.data?.detail;
     if (error.response.status === 401) handleExpiredToken();

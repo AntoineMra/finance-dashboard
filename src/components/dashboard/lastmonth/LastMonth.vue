@@ -54,9 +54,7 @@ const getLastBudget = async () => {
       "/budgets?order%5BcreatedAt%5D=desc"
     );
 
-    response.data.slice(1).forEach((budget) => {
-      lastBudget.value = budget;
-    });
+    response.data[0] && (lastBudget.value = response.data[0]);
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
   }

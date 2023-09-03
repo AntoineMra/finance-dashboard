@@ -1,21 +1,21 @@
 <template>
   <main class="home py-12 px-10">
-    <section class="glass py-8 pl-8 pb-16">
+    <section class="glass py-8 pl-8 pb-4">
       <header>
         <h2 class="py-8 px-8 text-4xl font-bold flex-shrink-0">
           Extraction de relevé
         </h2>
       </header>
-      <div>
+      <div class="w-full">
         <form
           @submit.prevent="postExtraction()"
-          class="mx-auto mt-16 max-w-xl sm:mt-20"
+          class="mt-16 max-w-xl sm:mt-20"
         >
           <div class="grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
             <div>
               <label
                 for="name"
-                class="block text-sm font-semibold leading-6 text-gray-900"
+                class="block text-lg pb-4 font-semibold leading-6 text-gray-900"
                 >Fichier d'extraction</label
               >
               <div class="mt-2.5">
@@ -30,32 +30,32 @@
 
               <button
                 @click="createMediaObject"
-                class="block w-full rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+                class="block w-32 mt-8 rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
               >
                 Extraire
               </button>
             </div>
           </div>
-          <div class="mt-10">
-            <last-table :rows="null" :transactions="[]" />
+          <div class="mt-10" v-if="validatedTransactions.length !== 0">
+            <last-table :rows="null" :transactions="validatedTransactions" />
             <!-- Here show transaction Extracted that are in draft -->
           </div>
-          <div class="mt-10">
-            <last-table :rows="null" :transactions="[]" />
+          <div class="mt-10" v-if="pendingTransactions.length !== 0">
+            <last-table :rows="null" :transactions="pendingTransactions" />
             <!-- Here show transaction Extracted that are validated -->
           </div>
           <div class="mt-10">
             <router-link :to="`/budget/${budget?.['@id']}/transactions`">
               <button
                 :disabled="areTransactionsValidated()"
-                class="block w-full rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+                class="block w-32 rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
               >
                 Suivant
               </button>
             </router-link>
             <router-link :to="`/budget/${budget?.['@id']}/transactions`">
               <button
-                class="block w-full rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+                class="block mt-4 w-64 rounded-md px-3.5 py-2.5 text-left text-sm font-semibold text-black"
               >
                 Passer cette étape
               </button>
@@ -71,13 +71,20 @@
 import { ref, onBeforeMount } from "vue";
 import { getInstance } from "@/api/axios";
 import { handleExpiredToken } from "@/api/config";
-import type { Budget, MediaObject, BankExtraction } from "@/interface/api";
+import type {
+  Budget,
+  MediaObject,
+  BankExtraction,
+  Transaction,
+} from "@/interface/api";
 import { useRoute } from "vue-router";
 import LastTable from "@/components/dashboard/lastmonth/LastTable.vue";
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const extractionFile = ref<MediaObject | null>(null);
 const fileError = ref<string>("");
+const validatedTransactions = ref<Transaction[]>([]);
+const pendingTransactions = ref<Transaction[]>([]);
 const budget = ref<Budget>();
 const route = useRoute();
 
