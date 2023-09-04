@@ -70,11 +70,7 @@ const getBudgets = async () => {
     const response = await instance.get("/budgets?status=completed");
     budgets.value = response.data;
   } catch (error: any) {
-    if (error.response.status === 401) {
-      authStore.resetToken();
-      authStore.setLoggedIn(false);
-      handleExpiredToken();
-    }
+    if (error.response.status === 401) handleExpiredToken();
   }
 };
 
