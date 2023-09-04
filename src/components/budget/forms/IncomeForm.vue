@@ -9,12 +9,12 @@
 </template>
 
 <script setup lang="ts">
-//import type { Transac } from "@/interface/api";
+//import type { Transaction } from "@/interface/api";
 //import { ref } from "vue";
 
-/* const expense = ref<Transac | object>({});
+/* const expense = ref<Transaction | object>({});
 
-const props = defineProps({
+const props = defineProps({Transaction
   budget: {
     type: Object,
     required: true,

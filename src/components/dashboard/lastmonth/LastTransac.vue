@@ -8,13 +8,13 @@
 <script setup lang="ts">
 import LastTableHeader from "./LastTableHeader.vue";
 import LastTable from "./LastTable.vue";
-import type { Budget, Transac } from "@/interface/api";
+import type { Budget, Transaction } from "@/interface/api";
 import { onBeforeMount, ref } from "vue";
 
 const props = defineProps<{
   budget: Budget | null;
 }>();
-const transactions = ref<Transac[] | undefined>();
+const transactions = ref<Transaction[] | undefined>();
 
 const getTransactions = (filter = null) => {
   if (filter) {

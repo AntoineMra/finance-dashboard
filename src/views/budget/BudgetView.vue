@@ -57,10 +57,10 @@ import CardBudget from "@/components/budget/CardBudget.vue";
 import LastTable from "@/components/dashboard/lastmonth/LastTable.vue";
 import { ref, onBeforeMount } from "vue";
 import { getInstance } from "@/api/axios";
-import type { Budget, Transac } from "@/interface/api";
+import type { Budget, Transaction } from "@/interface/api";
 
 let budgets = ref<Budget[]>([]);
-let transactions = ref<Transac[]>([]);
+let transactions = ref<Transaction[]>([]);
 const authStore = useAuthStore();
 
 const getBudgets = async () => {
@@ -70,11 +70,7 @@ const getBudgets = async () => {
     const response = await instance.get("/budgets?status=completed");
     budgets.value = response.data;
   } catch (error: any) {
-    if (error.response.status === 401) {
-      authStore.resetToken();
-      authStore.setLoggedIn(false);
-      handleExpiredToken();
-    }
+    if (error.response.status === 401) handleExpiredToken();
   }
 };
 

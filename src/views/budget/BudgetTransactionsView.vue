@@ -5,10 +5,27 @@
         <h2 class="py-8 px-8 text-4xl font-bold flex-shrink-0">
           Mon nouveau budget
         </h2>
+        <nav class="flex">
+          <router-link
+            :active-class="'isActive'"
+            to="/budget/new/income"
+            class="text-lg font-bold border-r-purple-500 p-2 mr-2 hover:bg-purple-200"
+            >Revenus</router-link
+          >
+          <router-link
+            :active-class="'isActive'"
+            to="/budget/new/expense"
+            class="text-lg font-bold p-2 ml-2 hover:bg-purple-200"
+            >Dépenses</router-link
+          >
+        </nav>
       </header>
 
       <div>
-        <form @submit.prevent="createBudget()" class="mt-16 max-w-xl sm:mt-20">
+        <form
+          @submit.prevent="createBudget()"
+          class="mx-auto mt-16 max-w-xl sm:mt-20"
+        >
           <div class="grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
             <div>
               <label
@@ -48,15 +65,12 @@
           <div class="mt-10">
             <button
               type="submit"
-              class="block w-32 rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+              class="block w-full rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
             >
               Suivant
             </button>
           </div>
         </form>
-        <div class="mt-10 bg-red-400 rounded-md p-4" v-if="errorMessage !== ''">
-          <p>{{ errorMessage }}</p>
-        </div>
       </div>
     </section>
   </main>
@@ -66,31 +80,23 @@
 import { ref } from "vue";
 import { getInstance } from "@/api/axios";
 import type { Budget } from "@/interface/api";
-import { handleExpiredToken } from "@/api/config";
-import { useRouter } from "vue-router";
 
 const title = ref<string>("");
 const date = ref<Date>();
-const router = useRouter();
-const errorMessage = ref<string>("");
 
 const createBudget = async () => {
-  const payload: Partial<Budget> = {
+  const budget: Partial<Budget> = {
     title: title.value,
     date: date.value,
+    status: "draft",
     transactions: [],
   };
   const instance = getInstance();
+  instance.post("/budget", budget);
 
-  try {
-    const response = await instance.post("/budgets", payload);
-    const budget = response.data;
-    router.push(`/budget/${budget.id}/extraction`);
-  } catch (error: any) {
-    errorMessage.value = error.response.data?.detail;
-    if (error.response.status === 401) handleExpiredToken();
-  }
+  //TODO should redirect to Budget Extraction View
 };
+
 </script>
 
 <style scoped>

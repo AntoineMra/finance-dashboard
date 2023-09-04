@@ -7,7 +7,10 @@ import ExpenseForm from "@/components/budget/forms/ExpenseForm.vue";
 import IncomeForm from "@/components/budget/forms/IncomeForm.vue";
 import GoalsView from "@/views/goals/GoalsView.vue";
 import InvestView from "@/views/invest/InvestView.vue";
+import BudgetTransactionsView from "@/views/budget/BudgetTransactionsView.vue";
+import BudgetExtractionView from "@/views/budget/BudgetExtractionView .vue";
 import BudgetRecapView from "@/views/budget/BudgetRecapView.vue";
+import ParameterView from "@/views/parameters/ParameterView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,14 +31,19 @@ const router = createRouter({
       component: BudgetView,
     },
     {
-      path: "/budget/:id/recap",
-      name: "budgetRecap",
-      component: BudgetRecapView,
+      path: "/budget/new",
+      name: "budgetForm",
+      component: NewBudgetView,
     },
     {
-      path: "/budget/new",
-      name: "budgetFrom",
-      component: NewBudgetView,
+      path: "/budget/:id/extraction",
+      name: "budgetExtraction",
+      component: BudgetExtractionView,
+    },
+    {
+      path: "/budget/:id/transactions",
+      name: "budgetTransactions",
+      component: BudgetTransactionsView,
       children: [
         {
           path: "expense",
@@ -50,6 +58,11 @@ const router = createRouter({
       ],
     },
     {
+      path: "/budget/:id/recap",
+      name: "budgetRecap",
+      component: BudgetRecapView,
+    },
+    {
       path: "/invest",
       name: "invest",
       component: InvestView,
@@ -58,6 +71,11 @@ const router = createRouter({
       path: "/goals",
       name: "goals",
       component: GoalsView,
+    },
+    {
+      path: "/parameters",
+      name: "parameters",
+      component: ParameterView,
     },
   ],
 });
