@@ -4,7 +4,7 @@
   </div>
 
   <section>
-    <form @submit.prevent="createBudget()" class="mt-16 max-w-xl sm:mt-20">
+    <form @submit.prevent="createCategory()" class="mt-16 max-w-xl sm:mt-20">
       <div class="grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
         <div>
           <label
@@ -36,7 +36,11 @@
               id="domain"
               class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
             >
-              <option v-for="domain in domains" :key="domain?.["@id"]" :value="domain?.["@id"]">
+              <option
+                v-for="domain in domains"
+                :key="domain.id"
+                :value="domain.id"
+              >
                 {{ domain?.label }}
               </option>
             </select>
@@ -57,9 +61,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { getInstance } from "@/api/axios";
-import type { Category } from "@/interface/api";
+import type { Category, Domain } from "@/interface/api";
 import { handleExpiredToken } from "@/api/config";
 
 const label = ref<string>("");
@@ -76,8 +80,8 @@ const createCategory = async () => {
 
   try {
     const response = await instance.post("/categories", payload);
-    const budget = response.data;
-
+    const category = response.data;
+    categories.value.push(category);
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
   }
@@ -92,7 +96,7 @@ const getAllDomains = async () => {
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
   }
-}
+};
 
 const getAllCategories = async () => {
   const instance = getInstance();
@@ -103,10 +107,11 @@ const getAllCategories = async () => {
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
   }
-}
+};
 
 onBeforeMount(() => {
   getAllDomains();
+  getAllCategories();
 });
 </script>
 

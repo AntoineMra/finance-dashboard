@@ -21,6 +21,7 @@ export interface Category {
 }
 
 export interface Transaction {
+  "@id"?: string;
   id: string;
   date?: string;
   label: string;
@@ -30,11 +31,13 @@ export interface Transaction {
 }
 
 export interface Domain {
+  "@id"?: string;
   id: string;
   label: string;
 }
 
 export interface Invest {
+  "@id"?: string;
   id: string;
   initialAmount: number;
   currentAmount: number;
@@ -45,6 +48,7 @@ export interface Invest {
 }
 
 export interface Goal {
+  "@id"?: string;
   id: string;
   purpose: string;
   endingDate: string;
@@ -54,6 +58,7 @@ export interface Goal {
 }
 
 export interface Support {
+  "@id"?: string;
   id: string;
   name: string;
   type: InvestType;
@@ -67,6 +72,7 @@ export interface MediaObject {
 }
 
 export interface BankExtraction {
+  "@id"?: string;
   id: string;
   month: string;
   mediaObject: MediaObject;
@@ -74,6 +80,7 @@ export interface BankExtraction {
 }
 
 export interface BankExtractionResponse {
+  "@id"?: string;
   budget: Budget;
   month: string;
   transactions: Transaction[];
