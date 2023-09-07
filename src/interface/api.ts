@@ -17,7 +17,7 @@ export interface Category {
   "@id"?: string;
   id: string;
   label: string;
-  domain: Domain;
+  domain: string;
 }
 
 export interface Transaction {
