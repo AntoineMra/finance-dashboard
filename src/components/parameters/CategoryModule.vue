@@ -3,7 +3,13 @@
     <h2>Modules de paramètrages des catégories</h2>
   </div>
 
-  <section>
+  <section class="flex justify-between">
+    <div class="mt-16 max-w-xl sm:mt-20">
+      <div class="" v-for"category in categories" :key="category.id">
+        <!-- Should be transformed into a tab -->
+        {{ category.label }}
+      </div>
+    </div>
     <form @submit.prevent="createCategory()" class="mt-16 max-w-xl sm:mt-20">
       <div class="grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
         <div>
@@ -27,7 +33,7 @@
           <label
             for="domain"
             class="block text-sm font-semibold leading-6 text-gray-900"
-            >Date</label
+            >Domain</label
           >
           <div class="mt-2.5">
             <select
