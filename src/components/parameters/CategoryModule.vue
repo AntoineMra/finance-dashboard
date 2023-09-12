@@ -137,6 +137,21 @@ const createCategory = async () => {
   }
 };
 
+const updateCategory = async () => {
+  const payload: Partial<Category> = {
+    label: label.value,
+    domain: `api/domains/${domain.value}`,
+  };
+  const instance = getInstance();
+
+  try {
+    const response = await instance.put("/categories", payload);
+    const category = response.data;
+  } catch (error: any) {
+    if (error.response.status === 401) handleExpiredToken();
+  }
+};
+
 const deleteCategory = async (id: string) => {
   const instance = getInstance();
 
