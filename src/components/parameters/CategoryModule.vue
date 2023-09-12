@@ -9,7 +9,7 @@
               <th
                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
               >
-                Date
+                Nom
               </th>
               <th
                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
@@ -67,7 +67,7 @@
                 type="text"
                 name="name"
                 id="name"
-                autocomplete="Budget"
+                autocomplete="Catégorie"
                 class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
               />
             </div>
