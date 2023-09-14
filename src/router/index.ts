@@ -44,18 +44,6 @@ const router = createRouter({
       path: "/budget/:id/transactions",
       name: "budgetTransactions",
       component: BudgetTransactionsView,
-      children: [
-        {
-          path: "expense",
-          name: "expenseForm",
-          component: ExpenseForm,
-        },
-        {
-          path: "income",
-          name: "incomeForm",
-          component: IncomeForm,
-        },
-      ],
     },
     {
       path: "/budget/:id/recap",
