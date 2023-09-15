@@ -3,8 +3,6 @@ import DashboardView from "@/views/DashboardView.vue";
 import LoginView from "@/views/LoginView.vue";
 import BudgetView from "@/views/budget/BudgetView.vue";
 import NewBudgetView from "@/views/budget/NewBudgetView.vue";
-import ExpenseForm from "@/components/budget/forms/ExpenseForm.vue";
-import IncomeForm from "@/components/budget/forms/IncomeForm.vue";
 import GoalsView from "@/views/goals/GoalsView.vue";
 import InvestView from "@/views/invest/InvestView.vue";
 import BudgetTransactionsView from "@/views/budget/BudgetTransactionsView.vue";

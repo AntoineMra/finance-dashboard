@@ -14,6 +14,11 @@
               <th
                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
               >
+                Couleur
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+              >
                 Supprimer
               </th>
             </tr>
@@ -25,6 +30,13 @@
               >
                 <p class="text-gray-900 whitespace-no-wrap">
                   {{ domain.label }}
+                </p>
+              </td>
+              <td
+                class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
+              >
+                <p class="text-gray-900 whitespace-no-wrap">
+                  {{ domain.color }}
                 </p>
               </td>
               <td
@@ -60,6 +72,23 @@
               />
             </div>
           </div>
+          <div>
+            <label
+              for="color"
+              class="block text-sm font-semibold leading-6 text-gray-900"
+              >Couleur</label
+            >
+            <div class="mt-2.5">
+              <input
+                v-model="color"
+                type="color"
+                name="color"
+                id="color"
+                autocomplete="Couleur"
+                class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
+              />
+            </div>
+          </div>
         </div>
         <router-view />
         <div class="mt-10">
@@ -82,12 +111,13 @@ import type { Domain } from "@/interface/api";
 import { handleExpiredToken } from "@/api/config";
 
 const label = ref<string>("");
-const domain = ref<string>();
+const color = ref<string>("#FFFFFF");
 const domains = ref<Domain[]>([]);
 
 const createDomain = async () => {
   const payload: Partial<Domain> = {
     label: label.value,
+    color: color.value,
   };
   const instance = getInstance();
 
@@ -103,12 +133,14 @@ const createDomain = async () => {
 const updateDomain = async () => {
   const payload: Partial<Domain> = {
     label: label.value,
+    color: color.value,
   };
   const instance = getInstance();
 
   try {
     const response = await instance.put("/domains", payload);
     const domain = response.data;
+
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
   }

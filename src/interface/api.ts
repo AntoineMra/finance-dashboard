@@ -34,6 +34,7 @@ export interface Domain {
   "@id"?: string;
   id: string;
   label: string;
+  color: string;
 }
 
 export interface Invest {
@@ -79,11 +80,25 @@ export interface BankExtraction {
   budget: Budget;
 }
 
+export interface BankTranslation {
+  "@id"?: string;
+  id: string;
+  bankLabel: string;
+  customLabel: string;
+  category: string;
+}
+
 export interface BankExtractionResponse {
   "@id"?: string;
   budget: Budget;
   month: string;
-  transactions: Transaction[];
+  validatedTransactions: Transaction[];
+  draftTransactions: DraftObject[];
+}
+
+interface DraftObject {
+  translation: BankTranslation;
+  transaction: Transaction;
 }
 
 enum TransacType {
