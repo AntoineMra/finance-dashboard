@@ -14,6 +14,81 @@
           @submit.prevent="createTransactions()"
           class="mx-auto mt-16 max-w-xl sm:mt-20"
         >
+          <div>
+              <label
+                for="name"
+                class="block text-sm font-semibold leading-6 text-gray-900"
+                >Nom de la transaction</label
+              >
+              <div class="mt-2.5">
+                <input
+                  v-model="label"
+                  type="text"
+                  name="name"
+                  id="name"
+                  required
+                  autocomplete="Transaction"
+                  class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                for="amount"
+                class="block text-sm font-semibold leading-6 text-gray-900"
+                >Montant</label
+              >
+              <div class="mt-2.5">
+                <input
+                  v-model="amount"
+                  type="number"
+                  name="amount"
+                  id="amount"
+                  required
+                  autocomplete="100"
+                  class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                for="date"
+                class="block text-sm font-semibold leading-6 text-gray-900"
+                >Date</label
+              >
+              <div class="mt-2.5">
+                <input
+                  v-model="date"
+                  type="date"
+                  name="date"
+                  id="date"
+                  class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                for="category"
+                class="block text-sm font-semibold leading-6 text-gray-900"
+                >Catégorie</label
+              >
+              <div class="mt-2.5">
+                <select
+                  v-model="category"
+                  name="domain"
+                  id="domain"
+                  class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
+                >
+                  <option
+                    v-for="category in categories"
+                    :key="category.id"
+                    :value="category.id"
+                  >
+                    {{ category?.label }}
+                  </option>
+                </select>
+              </div>
+            </div>
           <div class="mt-10">
             <button
               type="submit"
@@ -32,11 +107,14 @@
 import { ref } from "vue";
 import { getInstance } from "@/api/axios";
 import type { Transaction, Category } from "@/interface/api";
+import { useCategoryStore } from "@/stores/category";
 
 const label = ref<string>("");
 const amount = ref<number | null>(null);
 const date = ref<Date | null>(null);
 const category = ref<string>('');
+const comment = ref<string>('');
+const categories = ref<Category[]>([]);
 
 const createTransaction = async () => {
   const id = route.params.id;
@@ -46,10 +124,9 @@ const createTransaction = async () => {
     amount: amount.value,
     date: date.value,
     category: category.value,
-    budget: `api/budgets/${id}`
+    budget: `api/budgets/${id}`,
+    comment: comment.value
   };
-
-  // TODO : Add a Comment property to transactions in case of od or adjustments
 
   const instance = getInstance();
   instance.post("/transaction", transaction);

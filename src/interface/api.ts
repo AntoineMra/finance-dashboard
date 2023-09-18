@@ -28,6 +28,7 @@ export interface Transaction {
   amount: number;
   type: TransacType;
   category: string;
+  comment: string;
 }
 
 export interface Domain {
