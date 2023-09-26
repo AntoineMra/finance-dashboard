@@ -68,6 +68,7 @@ export interface Support {
 
 export interface MediaObject {
   "@id"?: string;
+  id: string;
   filePath: string;
   mimeType: string;
   size: number;
@@ -77,8 +78,8 @@ export interface BankExtraction {
   "@id"?: string;
   id: string;
   month: string;
-  mediaObject: MediaObject;
-  budget: Budget;
+  mediaObject: string;
+  budget: string;
 }
 
 export interface BankTranslation {

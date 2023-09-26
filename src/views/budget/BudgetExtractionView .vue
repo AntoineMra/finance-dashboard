@@ -1,67 +1,79 @@
 <template>
   <main class="home py-12 px-10">
-    <section class="glass py-8 pl-8 pb-4">
+    <section class="glass py-8 px-8 pb-4">
       <header>
         <h2 class="py-8 px-8 text-4xl font-bold flex-shrink-0">
           Extraction de relevé
         </h2>
       </header>
       <div class="w-full">
-        <form
-          @submit.prevent="postExtraction()"
-          class="mt-16 max-w-xl sm:mt-20"
-        >
-          <div class="grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
-            <div>
+        <form @submit.prevent="postExtraction()" class="mt-4 mb-8">
+          <div
+            class="border-gray-300 bg-gray-200 rounded-lg border-2 mx-24 p-16 flex justify-center items-center"
+          >
+            <div class="pr-8">
               <label
-                for="name"
-                class="block text-lg pb-4 font-semibold leading-6 text-gray-900"
+                for="formFile"
+                class="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
                 >Fichier d'extraction</label
               >
-              <div class="mt-2.5">
-                <input
-                  type="file"
-                  name="file"
-                  id="file"
-                  @change="onFileChange"
-                  class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
-                />
-              </div>
-
-              <button
-                @click="createMediaObject"
-                class="block w-32 mt-8 rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
-              >
-                Extraire
-              </button>
+              <input
+                class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
+                type="file"
+                id="formFile"
+                @change="onFileChange"
+              />
             </div>
-          </div>
-          <div class="mt-10" v-if="validatedTransactions.length !== 0">
-            <last-table :rows="null" :transactions="validatedTransactions" />
-            <!-- Here show transaction Extracted that are in draft -->
-          </div>
-          <div class="mt-10" v-if="pendingTransactions.length !== 0">
-            <last-table :rows="null" :transactions="pendingTransactions" />
-            <!-- Here show transaction Extracted that are validated -->
-          </div>
-          <div class="mt-10">
-            <router-link :to="`/budget/${budget?.['@id']}/transactions`">
-              <button
-                :disabled="areTransactionsValidated()"
-                class="block w-32 rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
-              >
-                Suivant
-              </button>
-            </router-link>
-            <router-link :to="`/budget/${budget?.['@id']}/transactions`">
-              <button
-                class="block mt-4 w-64 rounded-md px-3.5 py-2.5 text-left text-sm font-semibold text-black"
-              >
-                Passer cette étape
-              </button>
-            </router-link>
+
+            <div class="text-red-500 text-sm ml-4">{{ fileError }}</div>
+
+            <button
+              type="submit"
+              class="block w-32 self-end rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+            >
+              Extraire
+            </button>
           </div>
         </form>
+        <div class="mt-10" v-if="pendingTransactions.length !== 0">
+          <last-table :rows="null" :transactions="pendingTransactions" />
+          <!-- Here show transaction Extracted that are in draft -->
+        </div>
+        <div class="mt-10 flex justify-center items-center" v-else>
+          <div
+            class="px-5 py-3 border-b-2 w-96 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+          >
+            Aucune transaction en brouillon
+          </div>
+        </div>
+        <div class="mt-10" v-if="validatedTransactions.length !== 0">
+          <last-table :rows="null" :transactions="validatedTransactions" />
+          <!-- Here show transaction Extracted that are validated -->
+        </div>
+        <div class="mt-10 flex justify-center items-center" v-else>
+          <div
+            class="px-5 py-3 border-b-2 w-96 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+          >
+            Aucune transaction validée
+          </div>
+        </div>
+        <div class="mt-10 mx-8 flex justify-between items-center">
+          <router-link :to="`/budget/${budget?.['@id']}/transactions`">
+            <button
+              class="block w-64 rounded-md px-3.5 py-2.5 text-left text-sm font-semibold text-black"
+            >
+              Passer cette étape
+            </button>
+          </router-link>
+          <router-link :to="`/budget/${budget?.['@id']}/transactions`">
+            <button
+              :disabled="areTransactionsValidated()"
+              class="block w-32 rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+            >
+              Suivant
+            </button>
+          </router-link>
+        </div>
       </div>
     </section>
   </main>
@@ -89,24 +101,31 @@ const budget = ref<Budget>();
 const route = useRoute();
 
 const postExtraction = async () => {
-  if (!extractionFile.value) {
+  await createMediaObject();
+
+  if (extractionFile.value?.id === null) {
     fileError.value = "Veuillez ajouter un fichier d'extraction";
     return;
   }
   const instance = getInstance();
   const data: Partial<BankExtraction> = {
-    mediaObject: extractionFile.value,
-    budget: budget.value,
-    month: budget.value?.formatedDate,
+    mediaObject: `/api/media_objects/${extractionFile.value?.id}`,
+    budget: `/api/budgets/${budget.value?.id}`,
   };
 
   try {
-    const response = await instance.post("/bank-extractions", data);
-    console.log(response);
+    const response = await instance.post("/budgets/extraction", data, {
+      headers: {
+        "Content-Type": "application/ld+json",
+      },
+    });
+    console.log(response.data);
 
-    //TODO: Parse response
+    validatedTransactions.value = response.data.validatedTransactions;
+    pendingTransactions.value = response.data.draftTransactions;
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
+    console.log("error");
   }
 };
 
@@ -117,7 +136,8 @@ const onFileChange = (e: any) => {
 const createMediaObject = async () => {
   if (fileInput.value?.files?.length) {
     const response = await postMediaObject(fileInput.value?.files[0]);
-    if (typeof response === "object") {
+
+    if (response.id !== undefined) {
       extractionFile.value = response;
     } else {
       fileError.value = response;
@@ -130,7 +150,11 @@ const postMediaObject = async (fileObject: any) => {
   formData.append("file", fileObject, fileObject.name);
 
   const instance = getInstance();
-  const response = await instance.post("/media-objects/");
+  const response = await instance.post("/media_objects", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   if (response.status === 401) handleExpiredToken();
 
