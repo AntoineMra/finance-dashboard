@@ -98,7 +98,7 @@ export interface BankExtractionResponse {
   draftTransactions: DraftObject[];
 }
 
-interface DraftObject {
+export interface DraftObject {
   translation: BankTranslation;
   transaction: Transaction;
 }

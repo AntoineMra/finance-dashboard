@@ -36,7 +36,7 @@
           </div>
         </form>
         <div class="mt-10" v-if="pendingTransactions.length !== 0">
-          <last-table :rows="null" :transactions="pendingTransactions" />
+          <extraction-table :draft-transaction="pendingTransactions" />
           <!-- Here show transaction Extracted that are in draft -->
         </div>
         <div class="mt-10 flex justify-center items-center" v-else>
@@ -88,15 +88,16 @@ import type {
   MediaObject,
   BankExtraction,
   Transaction,
+DraftObject,
 } from "@/interface/api";
 import { useRoute } from "vue-router";
-import LastTable from "@/components/dashboard/lastmonth/LastTable.vue";
+import ExtractionTable from "@/components/budget/ExtractionTable.vue";
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const extractionFile = ref<MediaObject | null>(null);
 const fileError = ref<string>("");
 const validatedTransactions = ref<Transaction[]>([]);
-const pendingTransactions = ref<Transaction[]>([]);
+const pendingTransactions = ref<DraftObject[]>([]);
 const budget = ref<Budget>();
 const route = useRoute();
 
