@@ -88,10 +88,12 @@ import type {
   MediaObject,
   BankExtraction,
   Transaction,
-DraftObject,
+  DraftObject,
 } from "@/interface/api";
 import { useRoute } from "vue-router";
 import ExtractionTable from "@/components/budget/ExtractionTable.vue";
+import LastTable from "@/components/dashboard/lastmonth/LastTable.vue";
+import { useDraftsStore } from "@/stores/drafts";
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const extractionFile = ref<MediaObject | null>(null);
@@ -100,6 +102,7 @@ const validatedTransactions = ref<Transaction[]>([]);
 const pendingTransactions = ref<DraftObject[]>([]);
 const budget = ref<Budget>();
 const route = useRoute();
+const draftsStore = useDraftsStore();
 
 const postExtraction = async () => {
   await createMediaObject();
@@ -120,10 +123,12 @@ const postExtraction = async () => {
         "Content-Type": "application/ld+json",
       },
     });
-    console.log(response.data);
 
     validatedTransactions.value = response.data.validatedTransactions;
     pendingTransactions.value = response.data.draftTransactions;
+
+    //@ts-ignore
+    draftsStore.persistDrafts(route.params.id, pendingTransactions.value);
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
     console.log("error");
@@ -193,6 +198,9 @@ const areTransactionsValidated = () => {
 
 onBeforeMount(() => {
   getBudget();
+
+  //@ts-ignore
+  pendingTransactions.value = draftsStore.retrieveDrafts(route.params.id);
 });
 </script>
 
