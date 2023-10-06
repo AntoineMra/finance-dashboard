@@ -98,12 +98,12 @@
 </template>
 
 <script setup lang="ts">
-import { getInstance } from "@/api/axios";
 import type { Category, Transaction } from "@/interface/api";
 import { onBeforeMount, ref } from "vue";
-import { handleExpiredToken } from "@/api/config";
+import { useCategoryStore } from "@/stores/category";
 
 const categories = ref<Category[] | undefined>();
+const categoryStore = useCategoryStore();
 
 const props = defineProps<{
   rows: number | null;
@@ -117,24 +117,6 @@ const limitTransactions = () => {
 
   if (props.rows !== null && props.transactions !== undefined) {
     limitedTransactions.value = props.transactions.slice(0, props.rows);
-  }
-};
-
-const getCategories = async () => {
-  const instance = getInstance();
-  try {
-    const response = await instance.get<Category[]>("/categories", {
-      headers: {
-        Accept: "application/ld+json",
-      },
-    });
-
-    const result: any = response.data;
-    categories.value = result["hydra:member"];
-  } catch (error: any) {
-    if (error.response.status === 401) {
-      handleExpiredToken();
-    }
   }
 };
 
@@ -165,7 +147,11 @@ const formatDate = (date: string | undefined) => {
 };
 
 onBeforeMount(() => {
-  getCategories();
+  if (categoryStore.categories.length === 0) {
+    categoryStore.setCategories();
+  }
+
+  categories.value = categoryStore.categories;
   limitTransactions();
 });
 </script>

@@ -8,87 +8,86 @@
       </header>
 
       <div>
-
         <!-- The form should add ligne to an existing transaction table -->
         <form
-          @submit.prevent="createTransactions()"
+          @submit.prevent="createTransaction"
           class="mx-auto mt-16 max-w-xl sm:mt-20"
         >
           <div>
-              <label
-                for="name"
-                class="block text-sm font-semibold leading-6 text-gray-900"
-                >Nom de la transaction</label
-              >
-              <div class="mt-2.5">
-                <input
-                  v-model="label"
-                  type="text"
-                  name="name"
-                  id="name"
-                  required
-                  autocomplete="Transaction"
-                  class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
-                />
-              </div>
+            <label
+              for="name"
+              class="block text-sm font-semibold leading-6 text-gray-900"
+              >Nom de la transaction</label
+            >
+            <div class="mt-2.5">
+              <input
+                v-model="label"
+                type="text"
+                name="name"
+                id="name"
+                required
+                autocomplete="Transaction"
+                class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
+              />
             </div>
-            <div>
-              <label
-                for="amount"
-                class="block text-sm font-semibold leading-6 text-gray-900"
-                >Montant</label
-              >
-              <div class="mt-2.5">
-                <input
-                  v-model="amount"
-                  type="number"
-                  name="amount"
-                  id="amount"
-                  required
-                  autocomplete="100"
-                  class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
-                />
-              </div>
+          </div>
+          <div>
+            <label
+              for="amount"
+              class="block text-sm font-semibold leading-6 text-gray-900"
+              >Montant</label
+            >
+            <div class="mt-2.5">
+              <input
+                v-model="amount"
+                type="number"
+                name="amount"
+                id="amount"
+                required
+                autocomplete="100"
+                class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
+              />
             </div>
-            <div>
-              <label
-                for="date"
-                class="block text-sm font-semibold leading-6 text-gray-900"
-                >Date</label
-              >
-              <div class="mt-2.5">
-                <input
-                  v-model="date"
-                  type="date"
-                  name="date"
-                  id="date"
-                  class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
-                />
-              </div>
+          </div>
+          <div>
+            <label
+              for="date"
+              class="block text-sm font-semibold leading-6 text-gray-900"
+              >Date</label
+            >
+            <div class="mt-2.5">
+              <input
+                v-model="date"
+                type="date"
+                name="date"
+                id="date"
+                class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
+              />
             </div>
-            <div>
-              <label
-                for="category"
-                class="block text-sm font-semibold leading-6 text-gray-900"
-                >Catégorie</label
+          </div>
+          <div>
+            <label
+              for="category"
+              class="block text-sm font-semibold leading-6 text-gray-900"
+              >Catégorie</label
+            >
+            <div class="mt-2.5">
+              <select
+                v-model="category"
+                name="domain"
+                id="domain"
+                class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
               >
-              <div class="mt-2.5">
-                <select
-                  v-model="category"
-                  name="domain"
-                  id="domain"
-                  class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
+                <option
+                  v-for="category in categories"
+                  :key="category.id"
+                  :value="category.id"
                 >
-                  <option
-                    v-for="category in categories"
-                    :key="category.id"
-                    :value="category.id"
-                  >
-                    {{ category?.label }}
-                  </option>
-                </select>
-              </div>
+                  {{ category?.label }}
+                </option>
+              </select>
             </div>
+          </div>
           <div class="mt-10">
             <button
               type="submit"
@@ -104,43 +103,54 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { getInstance } from "@/api/axios";
-import type { Transaction, Category } from "@/interface/api";
+import type { Category } from "@/interface/api";
 import { useCategoryStore } from "@/stores/category";
+import { useRoute } from "vue-router";
 
 const label = ref<string>("");
-const amount = ref<number | null>(null);
-const date = ref<Date | null>(null);
-const category = ref<string>('');
-const comment = ref<string>('');
+const amount = ref<number | undefined>();
+const date = ref<string | undefined>();
+const category = ref<string>("");
+const comment = ref<string>("");
 const categories = ref<Category[]>([]);
+const categoryStore = useCategoryStore();
+
+const route = useRoute();
 
 const createTransaction = async () => {
   const id = route.params.id;
-  
-  const transaction: Partial<Transaction> = {
-    title: title.value,
+
+  const transaction: object = {
+    label: label.value,
     amount: amount.value,
     date: date.value,
     category: category.value,
     budget: `api/budgets/${id}`,
-    comment: comment.value
+    comment: comment.value,
   };
 
   const instance = getInstance();
   instance.post("/transaction", transaction);
 
-  resetFieldsValues()
+  resetFieldsValues();
 };
 
 const resetFieldsValues = () => {
   label.value = "";
-  amount.value = null;
-  date.value = null;
-  category.value = '';
-}
+  amount.value = undefined;
+  date.value = undefined;
+  category.value = "";
+};
 
+onBeforeMount(() => {
+  if (categoryStore.categories.length === 0) {
+    categoryStore.setCategories();
+  }
+
+  categories.value = categoryStore.categories;
+});
 </script>
 
 <style scoped>

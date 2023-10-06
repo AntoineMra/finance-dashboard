@@ -4,7 +4,7 @@
       <h1 class="text-4xl font-bold">Répertoire de comptes</h1>
     </header>
 
-    <section class="">
+    <section>
       <div class="w-full flex items-stretch justify-start flex-wrap">
         <router-link
           to="budget/new"
@@ -28,13 +28,27 @@
           </svg>
         </router-link>
         <card-budget
-          v-for="(budget, index) in budgets"
+          v-for="(budget, index) in completedBudgets"
           :budget="budget"
           :index="index"
           :amountExpense="450"
           :amountIncome="350"
           :key="budget.id"
           @select="selectBudget"
+        />
+      </div>
+      <h2 class="pl-8 text-2xl font-bold mb-5">
+        Reprendre mes budgets en cours
+      </h2>
+      <div class="w-full flex items-stretch justify-start flex-wrap">
+        <card-budget
+          v-for="(budget, index) in wipBudgets"
+          :budget="budget"
+          :index="index"
+          :amountExpense="450"
+          :amountIncome="350"
+          :key="budget.id"
+          @select="redirectToBudget"
         />
       </div>
 
@@ -52,32 +66,45 @@
 
 <script setup lang="ts">
 import { handleExpiredToken } from "@/api/config";
-import { useAuthStore } from "@/stores/user";
 import CardBudget from "@/components/budget/CardBudget.vue";
 import LastTable from "@/components/dashboard/lastmonth/LastTable.vue";
 import { ref, onBeforeMount } from "vue";
 import { getInstance } from "@/api/axios";
 import type { Budget, Transaction } from "@/interface/api";
+import { useRouter } from "vue-router";
 
-let budgets = ref<Budget[]>([]);
+let completedBudgets = ref<Budget[]>([]);
+let wipBudgets = ref<Budget[]>([]);
 let transactions = ref<Transaction[]>([]);
-const authStore = useAuthStore();
+const router = useRouter();
 
 const getBudgets = async () => {
   const instance = getInstance();
 
   try {
-    const response = await instance.get("/budgets?status=completed");
-    budgets.value = response.data;
+    const response = await instance.get("/budgets");
+
+    completedBudgets.value = response.data.filter(
+      (budget: Budget) => budget.status === "completed"
+    );
+    wipBudgets.value = response.data.filter(
+      (budget: Budget) => budget.status === "draft"
+    );
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
   }
 };
 
 const selectBudget = (budgetId: string) => {
-  const budget = budgets.value.find((budget: Budget) => budget.id === budgetId);
+  const budget = completedBudgets.value.find(
+    (budget: Budget) => budget.id === budgetId
+  );
 
   transactions.value = budget ? budget.transactions : [];
+};
+
+const redirectToBudget = (budgetId: string) => {
+  router.push({ name: "budgetExtraction", params: { id: budgetId } });
 };
 
 onBeforeMount(() => {
