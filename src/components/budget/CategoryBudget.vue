@@ -12,29 +12,53 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import CategoryCharts from "../charts/CategoryCharts.vue";
 import type { dataset } from "@/interface/charts";
-import type { Category } from "@/interface/api";
+import type { Category, Budget, Transaction } from "@/interface/api";
+import { useCategoryStore } from "@/stores/category";
 
-// Gestion Couleur Category Switch case sur category.type -> ajout category.color = code couleur en hexa
+const categories = ref<Category[] | undefined>();
+const labels = ref<string[]>([]);
+const data = ref<number[]>([]);
+const categoryStore = useCategoryStore();
 
-// Gestion d'un emits sur une category pour filtrer les revenus'
+// TODO Gestion Couleur Category Switch case sur category.type -> ajout category.color = code couleur en hexa
 
-/* const props = defineProps({
-  budget: { type: Object, required: true },
-});
+const props = defineProps<{
+  budget: Budget;
+}>();
 
-const emit = defineEmits(["category"]); */
+const mapDataValues = () => {
+  categories.value?.forEach((category: Category) => {
+    labels.value.push(category.label);
+    data.value.push(getCategoryTotal(category["@id"] ?? ""));
+  });
+};
 
-let categories = ref<Category[]>([]);
-const labels = ["Besoin", "Plaisir", "Dépenses courantes"];
+const getCategoryTotal = (categoryId: string) => {
+  // Check if category isn't a IRI instead of ID
+  const transactions = props.budget?.transactions.filter(
+    (transaction: Transaction) => transaction.category === categoryId
+  );
+
+  if (transactions) {
+    const total = transactions.reduce(
+      (acc: number, transaction: Transaction) => acc + transaction.amount,
+      0
+    );
+
+    return total;
+  }
+
+  return 0;
+};
 
 const datasets: dataset[] = [
   {
     label: "Ensemble des catégories",
     backgroundColor: "#a855f7",
-    data: [500, 500, 500],
+    data: data.value,
   },
 ];
 const options: Record<string, any> = {
@@ -53,33 +77,13 @@ const options: Record<string, any> = {
   maintainAspectRatio: false,
 };
 
-onMounted(() => {
-  /* fetch("http://localhost:7000/api/categories")
-    .then((res) => {
-      return res.json();
-    })
-    .then((res) => {
-      categories.value = res;
-      return categories.value.map((category) => {
-        switch (category.type) {
-          case "Besoin":
-            category.color = "#9fc5e8";
-            break;
-          case "Plaisir":
-            category.color = "#ea9999";
-            break;
-          case "Dépenses courantes":
-            category.color = "#f6b26b";
-            break;
-          default:
-            category.color = "#cccccc";
-            break;
-        }
-      });
-    })
-    .catch(() => {
-      console.warn("DB could not be reached");
-    }); */
+onBeforeMount(() => {
+  if (categoryStore.categories.length === 0) {
+    categoryStore.setCategories();
+  }
+
+  categories.value = categoryStore.categories;
+  mapDataValues();
 });
 </script>
 

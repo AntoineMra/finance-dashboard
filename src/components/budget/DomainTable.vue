@@ -43,7 +43,7 @@ import { handleExpiredToken } from "@/api/config";
 import { useCategoryStore } from "@/stores/category";
 
 const props = defineProps<{
-  budget: Budget | null;
+  budget: Budget | undefined;
 }>();
 
 let domains = ref<Domain[]>([]);

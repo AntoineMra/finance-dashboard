@@ -59,6 +59,16 @@ export interface Goal {
   investment: Invest;
 }
 
+export interface Memo {
+  "@id"?: string;
+  id: string;
+  content: string;
+  date: Date;
+  formatedDate: string;
+  status: string;
+  createdAt?: Date;
+}
+
 export interface Support {
   "@id"?: string;
   id: string;

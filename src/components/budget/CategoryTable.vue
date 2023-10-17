@@ -41,7 +41,7 @@ import { onBeforeMount, ref } from "vue";
 import { useCategoryStore } from "@/stores/category";
 
 const props = defineProps<{
-  budget: Budget | null;
+  budget: Budget | undefined;
 }>();
 
 const categories = ref<Category[] | undefined>();

@@ -16,20 +16,53 @@ const props = defineProps<{
 }>();
 const transactions = ref<Transaction[] | undefined>();
 
-const getTransactions = (filter = null) => {
-  if (filter) {
-    //TODO Implement search Filter and Type filter
+type Filter = {
+  type: "select" | "search";
+  value: string;
+};
+
+const getTransactions = (filter: Filter | null = null) => {
+  if (!props.budget) {
+    transactions.value = undefined;
+    return;
   }
 
-  transactions.value = props.budget?.transactions;
+  switch (filter?.type) {
+    case "select":
+      transactions.value = props.budget.transactions.filter(
+        (transaction: Transaction) => transaction.category === filter.value
+      );
+      break;
+    case "search":
+      transactions.value = props.budget.transactions.filter(
+        (transaction: Transaction) =>
+          transaction.label.toLowerCase().includes(filter.value.toLowerCase())
+      );
+      break;
+    default:
+      transactions.value = props.budget.transactions;
+      break;
+  }
 };
 
 const onSelect = (value: string) => {
-  console.log(value);
+  const filter: Filter = {
+    type: "select",
+    value: value,
+  };
+
+  if (value !== "all") {
+    getTransactions(filter);
+  }
 };
 
 const onSearch = (value: string) => {
-  console.log(value);
+  const filter: Filter = {
+    type: "search",
+    value: value,
+  };
+
+  getTransactions(filter);
 };
 
 onBeforeMount(() => {
