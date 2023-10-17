@@ -21,7 +21,7 @@
             <td
               class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
             >
-              {{ category.name }}
+              {{ category.label }}
             </td>
             <td
               class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
@@ -36,17 +36,34 @@
 </template>
 
 <script setup lang="ts">
-import type { Budget, Domain } from "@/interface/api";
+import type { Budget, Category, Transaction } from "@/interface/api";
 import { onBeforeMount, ref } from "vue";
-import { getInstance } from "@/api/axios";
 import { useCategoryStore } from "@/stores/category";
 
 const props = defineProps<{
-  budget: Buget | null;
+  budget: Budget | null;
 }>();
 
 const categories = ref<Category[] | undefined>();
 const categoryStore = useCategoryStore();
+
+const getCategoryValue = (categoryId: string) => {
+  // Check if category isn't a IRI instead of ID
+  const transactions = props.budget?.transactions.filter(
+    (transaction: Transaction) => transaction.category === categoryId
+  );
+
+  if (transactions) {
+    const total = transactions.reduce(
+      (acc: number, transaction: Transaction) => acc + transaction.amount,
+      0
+    );
+
+    return total;
+  }
+
+  return 0;
+};
 
 onBeforeMount(() => {
   if (categoryStore.categories.length === 0) {
