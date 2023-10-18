@@ -18,8 +18,17 @@
     </header>
 
     <section class="glass">
-      <div class="w-full flex items-stretch justify-center flex-wrap">
+      <div class="w-full flex items-stretch justify-center flex-wrap pb-8">
         <last-table :rows="null" :transactions="budget?.transactions" />
+      </div>
+
+      <div class="w-full flex items-stretch justify-center flex-wrap">
+        <div class="mb-4">
+          <category-table :budget="budget" />
+        </div>
+        <div class="mb-4">
+          <domain-table :budget="budget" />
+        </div>
       </div>
     </section>
   </div>
@@ -32,6 +41,8 @@ import { getInstance } from "@/api/axios";
 import type { Budget } from "@/interface/api";
 import { useRoute } from "vue-router";
 import LastTable from "@/components/dashboard/lastmonth/LastTable.vue";
+import CategoryTable from "@/components/budget/CategoryTable.vue";
+import DomainTable from "@/components/budget/DomainTable.vue";
 
 let budget = ref<Budget>();
 const route = useRoute();
@@ -52,6 +63,8 @@ const getBudget = async () => {
 
 // TODO Add possibility to fetch goal and show if it's reached or not on the top bubble
 
+// TODO Add possibility to Manage memos
+
 onBeforeMount(() => {
   getBudget();
 });
@@ -67,4 +80,3 @@ onBeforeMount(() => {
   border: 2px solid rgba(255, 255, 255, 0.3);
 }
 </style>
-

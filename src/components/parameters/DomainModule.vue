@@ -140,7 +140,6 @@ const updateDomain = async () => {
   try {
     const response = await instance.put("/domains", payload);
     const domain = response.data;
-
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
   }
