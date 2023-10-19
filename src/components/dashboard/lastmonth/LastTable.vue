@@ -147,6 +147,8 @@ const formatDate = (date: string | undefined) => {
 };
 
 onBeforeMount(() => {
+  console.log(categoryStore.categories.length);
+  
   if (categoryStore.categories.length === 0) {
     categoryStore.setCategories();
   }
