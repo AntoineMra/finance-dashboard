@@ -146,11 +146,9 @@ const formatDate = (date: string | undefined) => {
   return `${day}/${month}`;
 };
 
-onBeforeMount(() => {
-  console.log(categoryStore.categories.length);
-  
+onBeforeMount(async () => {
   if (categoryStore.categories.length === 0) {
-    categoryStore.setCategories();
+    await categoryStore.setCategories();
   }
 
   categories.value = categoryStore.categories;

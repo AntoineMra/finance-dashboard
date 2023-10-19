@@ -1,5 +1,5 @@
 <template>
-  <div class="modal" v-if="hidden">
+  <div class="modal">
     <form
       @submit.prevent="validateDraft"
       class="mx-auto mt-16 max-w-xl sm:mt-20"
@@ -8,17 +8,16 @@
         <label
           for="name"
           class="block text-sm font-semibold leading-6 text-gray-900"
-          >Nom de la transaction</label
+          >Nom de la transaction *</label
         >
         <div class="mt-2.5">
-          <input
+          <v-text-field
             v-model="label"
             type="text"
             name="name"
             id="name"
             required
             autocomplete="Transaction"
-            class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
           />
         </div>
       </div>
@@ -26,17 +25,16 @@
         <label
           for="amount"
           class="block text-sm font-semibold leading-6 text-gray-900"
-          >Montant</label
+          >Montant *</label
         >
         <div class="mt-2.5">
-          <input
+          <v-text-field
             v-model="amount"
             type="number"
             name="amount"
             id="amount"
             required
             autocomplete="100"
-            class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
           />
         </div>
       </div>
@@ -47,37 +45,30 @@
           >Date</label
         >
         <div class="mt-2.5">
-          <input
+          <v-text-field
             v-model="date"
+            :placeholder="date"
             type="date"
             name="date"
             id="date"
-            class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
           />
         </div>
       </div>
-      <div>
+      <div class="mt-2.5">
         <label
-          for="category"
+          for="date"
           class="block text-sm font-semibold leading-6 text-gray-900"
-          >Catégorie</label
+          >Catégorie *</label
         >
-        <div class="mt-2.5">
-          <select
-            v-model="category"
-            name="domain"
-            id="domain"
-            class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
-          >
-            <option
-              v-for="category in categories"
-              :key="category.id"
-              :value="category.id"
-            >
-              {{ category?.label }}
-            </option>
-          </select>
-        </div>
+        <v-select
+          v-model="category"
+          density="compact"
+          :items="categories"
+          item-title="label"
+          item-value="id"
+          required
+        >
+        </v-select>
       </div>
       <div class="mt-10">
         <button
@@ -100,12 +91,10 @@ import { useCategoryStore } from "../../stores/category";
 
 const props = defineProps<{
   draftObject: Partial<DraftObject> | undefined;
-  hidden: boolean;
 }>();
 
-const emits = defineEmits<{
-  close: () => void;
-}>();
+const emits = defineEmits(["close"]);
+
 const label = ref<string>("");
 const amount = ref<number | undefined>();
 const date = ref<string>("");
@@ -117,32 +106,37 @@ const categoryStore = useCategoryStore();
 const validateDraft = async (event: Event) => {
   event.preventDefault();
   const instance = getInstance();
-  const category = (event.target as HTMLFormElement).category.value;
 
   const transaction = {
     label: label.value,
     amount: amount.value,
     date: date.value,
-    category: category,
+    category: category.value,
     comment: comment.value,
     status: "validated",
   };
+
   const translation = {
-    customLabel: "string",
-    category: "string",
+    customLabel: label.value,
+    category: category.value,
     status: "validated",
   };
 
-  console.log(transaction, translation);
+  const response = await instance.put(
+    `/transactions/${props.draftObject?.transaction?.id}`,
+    {
+      transaction,
+    }
+  );
 
-  // TODO: Add update the transaction and push a translation
+  const transac = response.data;
 
-  emits.close();
+  emits("close");
 };
 
 const mapExistingValues = () => {
   if (props.draftObject) {
-    label.value = props.draftObject?.transaction?.label ?? "";
+    label.value = props.draftObject?.translation?.bankLabel ?? "";
     amount.value = props.draftObject?.transaction?.amount;
     date.value = props.draftObject?.transaction?.date ?? "";
     category.value = props.draftObject?.transaction?.category ?? "";
@@ -150,9 +144,9 @@ const mapExistingValues = () => {
   }
 };
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (categoryStore.categories.length === 0) {
-    categoryStore.setCategories();
+    await categoryStore.setCategories();
   }
 
   categories.value = categoryStore.categories;
@@ -161,4 +155,11 @@ onBeforeMount(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.modal {
+  background-color: white;
+  backdrop-filter: blur(2px);
+  border-radius: 12px;
+  padding: 2rem;
+}
+</style>
