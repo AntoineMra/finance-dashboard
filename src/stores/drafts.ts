@@ -10,11 +10,12 @@ export const useDraftsStore = defineStore({
       const storageDrafts = localStorage.getItem("drafts");
       const drafts = storageDrafts ? JSON.parse(storageDrafts) : null;
 
-      if (drafts === null || id === undefined) {
+      if (!drafts || id === undefined) {
         return [];
       }
 
-      return drafts.find((draft: any) => draft.id === id).drafts;
+      const draft = drafts.find((draft: any) => draft.id === id);
+      return draft ? draft.drafts : [];
     },
   },
   actions: {

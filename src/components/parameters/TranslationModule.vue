@@ -48,7 +48,7 @@ const category = ref<string>("");
 const getBankTranslations = async () => {
   try {
     const instance = getInstance();
-    const response = await instance.get("/bank-translations");
+    const response = await instance.get("/bank_translations");
     bankTranslations.value = response.data;
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
