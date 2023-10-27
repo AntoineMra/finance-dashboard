@@ -71,7 +71,7 @@
       </svg>
     </li>
     <li class="flex items-center justify-center text-2xl">
-      {{ budget?.transactionsDifferential + "%" }}
+      {{ budget?.transactionsPercent + "%" }}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6 ml-2 stroke-green-700"

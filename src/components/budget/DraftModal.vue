@@ -70,6 +70,23 @@
         >
         </v-select>
       </div>
+
+      <div>
+        <label
+          for="comment"
+          class="block text-sm font-semibold leading-6 text-gray-900"
+          >Commentaire</label
+        >
+        <div class="mt-2.5">
+          <v-textarea
+            v-model="comment"
+            type="text"
+            name="comment"
+            id="comment"
+            autocomplete="Commentaire"
+          />
+        </div>
+      </div>
       <div class="mt-10">
         <button
           type="submit"
@@ -111,7 +128,9 @@ const validateDraft = async (event: Event) => {
     label: label.value,
     amount: amount.value,
     date: date.value,
-    category: category.value,
+    category: `/api/categories/${category.value}`,
+    budget: props.draftObject?.transaction?.budget,
+    type: props.draftObject?.transaction?.type,
     comment: comment.value,
     status: "validated",
   };
@@ -122,16 +141,28 @@ const validateDraft = async (event: Event) => {
     status: "validated",
   };
 
-  const response = await instance.put(
-    `/transactions/${props.draftObject?.transaction?.id}`,
-    {
-      transaction,
+  try {
+    const responseTransac = await instance.post(`/transactions`, transaction);
+
+    if (props.draftObject?.translation?.id !== undefined) {
+      const responseTranslat = await instance.put(
+        `/bank_translations/${props.draftObject?.translation?.id}`,
+        {
+          translation,
+        }
+      );
     }
-  );
 
-  const transac = response.data;
+    const transac = responseTransac.data;
 
-  emits("close");
+    emits("close", transac);
+  } catch (error: any) {
+    if (error.response.status === 401) {
+      handleExpiredToken();
+    } else if (error.response.status === 400) {
+      throw new Error(error.response.data);
+    }
+  }
 };
 
 const mapExistingValues = () => {

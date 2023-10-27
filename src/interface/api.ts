@@ -24,6 +24,7 @@ export interface Transaction {
   "@id"?: string;
   id: string;
   date?: string;
+  budget?: string;
   label: string;
   amount: number;
   type: TransacType;

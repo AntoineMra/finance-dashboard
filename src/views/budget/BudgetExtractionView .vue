@@ -36,7 +36,10 @@
           </div>
         </form>
         <div class="mt-10" v-if="pendingTransactions.length !== 0">
-          <extraction-table :draft-transaction="pendingTransactions" />
+          <extraction-table
+            :draft-transaction="pendingTransactions"
+            @push-transaction="addTransac"
+          />
           <!-- Here show transaction Extracted that are in draft -->
         </div>
         <div class="mt-10 flex justify-center items-center" v-else>
@@ -58,14 +61,14 @@
           </div>
         </div>
         <div class="mt-10 mx-8 flex justify-between items-center">
-          <router-link :to="`/budget/${budget?.['@id']}/transactions`">
+          <router-link :to="`/budget/${route.params.id}/transactions`">
             <button
               class="block w-64 rounded-md px-3.5 py-2.5 text-left text-sm font-semibold text-black"
             >
               Passer cette étape
             </button>
           </router-link>
-          <router-link :to="`/budget/${budget?.['@id']}/transactions`">
+          <router-link :to="`/budget/${route.params.id}/transactions`">
             <button
               :disabled="areTransactionsValidated()"
               class="block w-32 rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
@@ -133,6 +136,10 @@ const postExtraction = async () => {
     if (error.response.status === 401) handleExpiredToken();
     console.log("error");
   }
+};
+
+const addTransac = (transac: any) => {
+  validatedTransactions.value.push(transac);
 };
 
 const onFileChange = (e: any) => {

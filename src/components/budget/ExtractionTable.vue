@@ -98,6 +98,8 @@ const props = defineProps<{
   draftTransaction: Partial<DraftObject>[] | undefined;
 }>();
 
+const emits = defineEmits(["push-transaction"]);
+
 const categories = ref<Category[] | undefined>();
 const dialog = ref<boolean>(false);
 const selectedDraftObject = ref<Partial<DraftObject> | undefined>();
@@ -108,7 +110,10 @@ const openModal = (draft: Partial<DraftObject>) => {
   dialog.value = true;
 };
 
-const closeModal = () => {
+const closeModal = (transac: any) => {
+  if (transac) {
+    emits("push-transaction", transac);
+  }
   selectedDraftObject.value = undefined;
   dialog.value = false;
 };
