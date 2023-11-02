@@ -23,5 +23,21 @@ export const useDraftsStore = defineStore({
       this.drafts.push({ id: id, drafts: draftObjects });
       localStorage.setItem("drafts", JSON.stringify(this.drafts));
     },
+    updatePersistedDrafts(id: string, draftObjects: any[]) {
+      const storageDrafts = localStorage.getItem("drafts");
+      const drafts = storageDrafts ? JSON.parse(storageDrafts) : null;
+
+      if (!drafts) {
+        return;
+      }
+
+      const draft = drafts.find((draft: any) => draft.id === id);
+      if (!draft) {
+        return;
+      }
+
+      draft.drafts = draftObjects;
+      localStorage.setItem("drafts", JSON.stringify(drafts));
+    },
   },
 });

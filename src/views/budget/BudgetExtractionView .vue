@@ -70,7 +70,6 @@
           </router-link>
           <router-link :to="`/budget/${route.params.id}/transactions`">
             <button
-              :disabled="areTransactionsValidated()"
               class="block w-32 rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
             >
               Suivant
@@ -140,6 +139,12 @@ const postExtraction = async () => {
 
 const addTransac = (transac: any) => {
   validatedTransactions.value.push(transac);
+  pendingTransactions.value = pendingTransactions.value.filter(
+    (draft) => draft.transaction?.id !== transac.id
+  );
+
+  //@ts-ignore
+  draftsStore.updatePersistedDrafts(route.params.id, pendingTransactions.value);
 };
 
 const onFileChange = (e: any) => {
@@ -189,19 +194,13 @@ const getBudget = async () => {
   try {
     const response = await instance.get("/budgets/" + id);
     budget.value = response.data;
+    validatedTransactions.value = budget.value?.transactions ?? [];
   } catch (error: any) {
     if (error.response.status === 401) {
       handleExpiredToken();
     }
   }
 };
-
-const areTransactionsValidated = () => {
-  // TODO check if all transactions are validated
-  return true;
-};
-
-// TODO Add possibility to fetch goal and show if it's reached or not on the top bubble
 
 onBeforeMount(() => {
   getBudget();

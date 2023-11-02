@@ -17,6 +17,7 @@ export interface Category {
   "@id"?: string;
   id: string;
   label: string;
+  type: TransacType;
   domain: string;
 }
 

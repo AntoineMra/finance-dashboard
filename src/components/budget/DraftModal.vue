@@ -1,9 +1,6 @@
 <template>
   <div class="modal">
-    <form
-      @submit.prevent="validateDraft"
-      class="mx-auto mt-16 max-w-xl sm:mt-20"
-    >
+    <form @submit.prevent="validateDraft" class="mx-auto my-16 max-w-xl">
       <div>
         <label
           for="name"
@@ -27,7 +24,7 @@
           class="block text-sm font-semibold leading-6 text-gray-900"
           >Montant *</label
         >
-        <div class="mt-2.5">
+        <div>
           <v-text-field
             v-model="amount"
             type="number"
@@ -44,7 +41,7 @@
           class="block text-sm font-semibold leading-6 text-gray-900"
           >Date</label
         >
-        <div class="mt-2.5">
+        <div>
           <v-text-field
             v-model="date"
             :placeholder="date"
@@ -54,7 +51,7 @@
           />
         </div>
       </div>
-      <div class="mt-2.5">
+      <div>
         <label
           for="date"
           class="block text-sm font-semibold leading-6 text-gray-900"
@@ -87,7 +84,7 @@
           />
         </div>
       </div>
-      <div class="mt-10">
+      <div>
         <button
           type="submit"
           class="block w-full rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
@@ -145,12 +142,16 @@ const validateDraft = async (event: Event) => {
     const responseTransac = await instance.post(`/transactions`, transaction);
 
     if (props.draftObject?.translation?.id !== undefined) {
-      const responseTranslat = await instance.put(
-        `/bank_translations/${props.draftObject?.translation?.id}`,
-        {
-          translation,
-        }
-      );
+      try {
+        await instance.put(
+          `/bank_translations/${props.draftObject?.translation?.id}`,
+          {
+            translation,
+          }
+        );
+      } catch (error) {
+        console.error("Error while updating translation");
+      }
     }
 
     const transac = responseTransac.data;
