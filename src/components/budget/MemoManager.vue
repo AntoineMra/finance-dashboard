@@ -1,10 +1,10 @@
 <template>
-  <div class="flex align-between justify-center">
+  <div class="w-full">
     <div>
       <h2 class="text-3xl font-bold">Mémos</h2>
     </div>
 
-    <div class="">
+    <div v-if="memos.length !== 0">
       <h2>Mes mémos</h2>
       <ul>
         <li v-for="memo in memos" :key="memo.id">
@@ -15,22 +15,37 @@
       </ul>
     </div>
 
-    <form @submit="createMemo">
-      <h2>J'ajoute un mémo</h2>
-      <div>
-        <label for="content"> Contenu :</label>
+    <form class="pt-8" @submit.prevent="createMemo">
+      <h3 class="text-lg">J'ajoute un mémo</h3>
+      <div class="pt-4">
+        <label class="py-2 mb-4" for="content"> Contenu :</label>
         <textarea
-          class="w-full h-96"
+          class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
           v-model="content"
           name="content"
           id="content"
-          cols="30"
-          rows="10"
+          cols="20"
+          rows="1"
         ></textarea>
       </div>
 
-      <label for=""></label>
-      <input type="date" />
+      <div class="pt-4 mb-10">
+        <label class="py-2 mb-4" for="date">Date :</label>
+        <input
+          type="date"
+          v-model="date"
+          name="date"
+          id="date"
+          class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="block w-full rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+      >
+        <span>Valider</span>
+      </button>
     </form>
   </div>
 </template>
@@ -68,7 +83,8 @@ const filterMemos = () => {
   });
 };
 
-const createMemo = async () => {
+const createMemo = async (e: Event) => {
+  e.preventDefault();
   const instance = getInstance();
   const response = await instance.post("/memos", {
     content: content.value,

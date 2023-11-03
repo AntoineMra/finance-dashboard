@@ -7,22 +7,8 @@
         </h2>
       </header>
 
-      <div class="flex justify-between content-center w-full px-8 pt-16">
+      <div class="flex justify-between content-center px-8 pt-16">
         <div class="w-full">
-          <div v-if="validatedTransac.length !== 0">
-            <last-table :rows="null" :transactions="validatedTransac" />
-            <!-- Here show transaction Extracted that are validated -->
-          </div>
-          <div class="flex justify-center items-center" v-else>
-            <div
-              class="px-5 py-3 border-b-2 w-96 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
-            >
-              Aucune transaction validée
-            </div>
-          </div>
-        </div>
-
-        <div>
           <form
             @submit.prevent="createTransaction"
             class="py-4 px-8 max-w-xl sm:py-20 bg-gray-100 shadow-md rounded-md"
@@ -165,6 +151,29 @@
             </div>
           </form>
         </div>
+
+        <div
+          class="py-4 px-8 max-w-xl w-2/5 sm:py-20 bg-gray-100 shadow-md rounded-md"
+          v-if="budget !== undefined"
+        >
+          <memo-manager :budget="budget" />
+        </div>
+      </div>
+
+      <div class="flex justify-between content-center px-8 pt-16">
+        <div class="w-full">
+          <div v-if="validatedTransac.length !== 0">
+            <last-table :rows="null" :transactions="validatedTransac" />
+            <!-- Here show transaction Extracted that are validated -->
+          </div>
+          <div class="flex justify-center items-center" v-else>
+            <div
+              class="px-5 py-3 border-b-2 w-96 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+            >
+              Aucune transaction validée
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -173,9 +182,10 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from "vue";
 import { getInstance } from "@/api/axios";
-import type { Category, Transaction } from "@/interface/api";
+import type { Budget, Category, Transaction } from "@/interface/api";
 import { useCategoryStore } from "@/stores/category";
 import LastTable from "@/components/dashboard/lastmonth/LastTable.vue";
+import MemoManager from "@/components/budget/MemoManager.vue";
 import { useRoute } from "vue-router";
 import { handleExpiredToken } from "@/api/config";
 
@@ -185,6 +195,7 @@ const date = ref<string | undefined>();
 const category = ref<string>("");
 const comment = ref<string>("");
 const categories = ref<Category[]>([]);
+const budget = ref<Budget | undefined>();
 const type = ref<string>("expense");
 const categoryStore = useCategoryStore();
 
@@ -227,9 +238,10 @@ const getAllTransactions = async () => {
   try {
     const response = await instance.get(`/budgets/${budgetId}`);
 
-    const budget = response.data;
+    const fetchedBudget = response.data;
 
-    validatedTransac.value = budget.transactions;
+    budget.value = fetchedBudget;
+    validatedTransac.value = fetchedBudget.transactions;
   } catch (error: any) {
     if (error.status === 401) handleExpiredToken();
   }
