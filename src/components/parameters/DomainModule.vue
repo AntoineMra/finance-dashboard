@@ -19,7 +19,7 @@
               <th
                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
               >
-                Supprimer
+                Actions
               </th>
             </tr>
           </thead>
@@ -42,12 +42,23 @@
               <td
                 class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
               >
-                <p
+                <button
                   @click="deleteDomain(domain.id)"
                   class="text-center text-xs text-red-500 cursor-pointer hover:text-red-400"
                 >
-                  Supprimer
-                </p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10.707 10l4.147-4.146a.5.5 0 10-.708-.708L10 9.293 5.854 5.147a.5.5 0 10-.708.708L9.293 10l-4.147 4.146a.5.5 0 10.708.708L10 10.707l4.146 4.147a.5.5 0 00.708-.708L10.707 10z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
               </td>
             </tr>
           </tbody>
@@ -125,21 +136,6 @@ const createDomain = async () => {
     const response = await instance.post("/domains", payload);
     const domain = response.data;
     domains.value.push(domain);
-  } catch (error: any) {
-    if (error.response.status === 401) handleExpiredToken();
-  }
-};
-
-const updateDomain = async () => {
-  const payload: Partial<Domain> = {
-    label: label.value,
-    color: color.value,
-  };
-  const instance = getInstance();
-
-  try {
-    const response = await instance.put("/domains", payload);
-    const domain = response.data;
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
   }

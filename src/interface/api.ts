@@ -18,7 +18,7 @@ export interface Category {
   id: string;
   label: string;
   type: TransacType;
-  domain: string;
+  domain: Domain;
 }
 
 export interface Transaction {
