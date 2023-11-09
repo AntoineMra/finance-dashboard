@@ -2,7 +2,7 @@
   <div class="p-8 pb-6 w-full glass">
     <h2 class="text-xl font-bold">Modules de paramètrages des catégories</h2>
     <div class="flex justify-between">
-      <div class="mt-16 max-w-xl sm:mt-20">
+      <div class="mt-16 max-w-xl sm:mt-20 overflow-y-scroll h-96">
         <table class="min-w-full leading-normal">
           <thead>
             <tr>
@@ -120,11 +120,11 @@
                     v-model="type"
                     type="radio"
                     value="expense"
-                    name="type"
-                    id="type"
+                    name="expense"
+                    id="expense"
                     class="mr-2"
                   />
-                  <label for="type" class="text-sm">Dépense</label>
+                  <label for="expense" class="text-sm">Dépense</label>
                 </div>
 
                 <div class="flex content-center">
@@ -132,11 +132,11 @@
                     v-model="type"
                     type="radio"
                     value="income"
-                    name="type"
-                    id="type"
+                    name="income"
+                    id="income"
                     class="mr-2"
                   />
-                  <label class="text-sm" for="type">Revenu</label>
+                  <label class="text-sm" for="income">Revenu</label>
                 </div>
               </div>
             </div>

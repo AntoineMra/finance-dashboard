@@ -1,8 +1,8 @@
 <template>
-  <div class="p-8 pb-2 w-full glass">
+  <div class="p-8 pb-4 w-full glass">
     <h2 class="text-xl font-bold">Modules de paramètrages des domaines</h2>
     <div class="flex justify-between">
-      <div class="mt-16 max-w-xl sm:mt-20">
+      <div class="mt-16 max-w-xl sm:mt-20 overflow-y-scroll h-96">
         <table class="min-w-full leading-normal">
           <thead>
             <tr>
@@ -65,7 +65,7 @@
         </table>
       </div>
       <form @submit.prevent="createDomain()" class="mt-16 max-w-xl sm:mt-20">
-        <div class="grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
+        <div>
           <div>
             <label
               for="name"
@@ -101,7 +101,6 @@
             </div>
           </div>
         </div>
-        <router-view />
         <div class="mt-10">
           <button
             type="submit"

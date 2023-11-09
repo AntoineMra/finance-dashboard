@@ -9,6 +9,8 @@ import BudgetTransactionsView from "@/views/budget/BudgetTransactionsView.vue";
 import BudgetExtractionView from "@/views/budget/BudgetExtractionView .vue";
 import BudgetRecapView from "@/views/budget/BudgetRecapView.vue";
 import ParameterView from "@/views/parameters/ParameterView.vue";
+import TranslationParameterView from "@/views/parameters/TranslationParameter.vue";
+import EditTranslationView from "@/views/parameters/EditTranslation.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -62,6 +64,20 @@ const router = createRouter({
       path: "/parameters",
       name: "parameters",
       component: ParameterView,
+    },
+    {
+      path: "/parameters/translations",
+      name: "translations",
+      component: TranslationParameterView,
+    },
+    {
+      path: "/parameters/translations/:id",
+      name: "editTranslation",
+      component: EditTranslationView,
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      redirect: "/",
     },
   ],
 });

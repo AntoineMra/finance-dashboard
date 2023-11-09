@@ -100,6 +100,7 @@ export interface BankTranslation {
   bankLabel: string;
   customLabel: string;
   category: string;
+  status: string;
 }
 
 export interface BankExtractionResponse {
