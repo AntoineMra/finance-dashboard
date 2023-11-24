@@ -93,7 +93,6 @@ onBeforeMount(async () => {
   }
 
   categories.value = categoryStore.categories;
-
   getDomains();
 });
 </script>

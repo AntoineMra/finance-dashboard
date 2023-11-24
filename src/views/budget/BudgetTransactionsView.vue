@@ -91,15 +91,14 @@
                 class="block text-sm font-semibold leading-6 text-gray-900"
                 >Date</label
               >
-              <div class="mt-2.5">
-                <input
-                  v-model="date"
-                  type="date"
-                  name="date"
-                  id="date"
-                  class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
-                />
-              </div>
+                <option
+                  v-for="category in categories"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  {{ category?.label }}
+                </option>
+              </select>
             </div>
             <div class="mt-2">
               <label

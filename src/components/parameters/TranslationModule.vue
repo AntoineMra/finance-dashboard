@@ -83,6 +83,37 @@
       </div>
     </div>
   </div>
+  <div class="flex justify-between">
+    <div class="mt-16 max-w-xl sm:mt-20">
+      <table class="min-w-full leading-normal">
+        <thead>
+          <tr>
+            <th
+              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+            >
+              Nom Bancaire
+            </th>
+            <th
+              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+            >
+              Traduction
+            </th>
+            <th
+              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+            >
+              Catégorie
+            </th>
+            <th
+              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+            >
+              Supprimer
+            </th>
+          </tr>
+        </thead>
+        <!-- Table is to be done -->
+      </table>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
