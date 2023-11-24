@@ -108,7 +108,6 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits(["close"]);
-
 const label = ref<string>("");
 const amount = ref<number | undefined>();
 const date = ref<string>("");
