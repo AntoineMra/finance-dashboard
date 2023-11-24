@@ -92,6 +92,7 @@
                 class="block text-sm font-semibold leading-6 text-gray-900"
                 >Date</label
               >
+              <select>
                 <option
                   v-for="category in categories"
                   :key="category.id"
