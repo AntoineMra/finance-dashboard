@@ -43,10 +43,6 @@ const getBudgets = async () => {
   });
 };
 
-const getMediumValue = () => {
-  //TODO: To be calculate with values
-};
-
 function reset() {
   medium.value = "Année " + 500;
 }

@@ -1,7 +1,7 @@
 <template>
   <ul class="flex flex-wrap items-center justify-between w-full px-8 max-w-xl">
     <li class="flex items-center justify-center text-2xl">
-      {{ budget?.transactionsTotalExpense }}
+      {{ props.budget?.transactionsTotalExpense }}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6 ml-2 stroke-red-600"
@@ -18,7 +18,7 @@
       </svg>
     </li>
     <li class="flex items-center justify-center text-2xl">
-      {{ budget?.transactionsTotalIncome }}
+      {{ props.budget?.transactionsTotalIncome }}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6 ml-2 stroke-green-700"
@@ -35,10 +35,10 @@
       </svg>
     </li>
     <li class="flex items-center justify-center text-2xl">
-      {{ budget?.transactionsDifferential }}
+      {{ props.budget?.transactionsDifferential }}
       <!-- @vue-ignore -->
       <svg
-        v-if="budget.transactionsDifferential >= 0"
+        v-if="props.budget?.transactionsDifferential ?? 0 >= 0"
         fill="none"
         :class="'stroke-green-700 ml-2 w-5 h-5'"
         stroke="currentColor"
@@ -71,7 +71,7 @@
       </svg>
     </li>
     <li class="flex items-center justify-center text-2xl">
-      {{ budget?.transactionsPercent + "%" }}
+      {{ props.budget?.transactionsPercent + "%" }}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6 ml-2 stroke-green-700"
@@ -92,6 +92,7 @@
 
 <script setup lang="ts">
 import type { Budget } from "@/interface/api";
+import { defineProps } from "vue";
 
 const props = defineProps<{
   budget: Budget | null;

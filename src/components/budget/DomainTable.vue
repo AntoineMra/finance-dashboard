@@ -71,7 +71,9 @@ const getDomainValue = (domainId: string) => {
         (category: Category) => category["@id"] === transaction.category
       );
 
-      return category?.domain === domainId;
+      if (category) {
+        return category.domain.id === domainId;
+      }
     }
   );
 
