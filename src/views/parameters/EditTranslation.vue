@@ -48,15 +48,17 @@ import { getInstance } from "@/api/axios";
 import type { BankTranslation, Category } from "@/interface/api";
 import { handleExpiredToken } from "@/api/config";
 import { useRoute, useRouter } from "vue-router";
+import { useCategoryStore } from "@/stores/category";
 
 const translation = ref<BankTranslation | null>(null);
-const category = ref<Category | null>(translation.value?.category ?? null);
-const customLabel = ref<string>(translation.value?.customLabel ?? "");
-const bankLabel = ref<string>(translation.value?.bankLabel ?? "");
-const status = ref<string>(translation.value?.status ?? "");
-const categories = ref<Category[]>([]);
+const category = ref<string>("");
+const customLabel = ref<string>("");
+const bankLabel = ref<string>("");
+const status = ref<string>("");
+const categories = ref<Category[] | undefined>();
 const route = useRoute();
 const router = useRouter();
+const categoryStore = useCategoryStore();
 
 const getBankTranslation = async () => {
   const id = route.params.id;
@@ -69,14 +71,11 @@ const getBankTranslation = async () => {
   }
 };
 
-const fetchCategories = async () => {
-  try {
-    const instance = getInstance();
-    const response = await instance.get("categories");
-    categories.value = response.data["hydra:member"];
-  } catch (error: any) {
-    if (error.response.status === 401) handleExpiredToken();
-  }
+const mapCurrentValues = () => {
+  customLabel.value = translation.value?.customLabel ?? "";
+  category.value = translation.value?.category ?? "";
+  bankLabel.value = translation.value?.bankLabel ?? "";
+  status.value = translation.value?.status ?? "";
 };
 
 const updateTranslation = async () => {
@@ -85,7 +84,7 @@ const updateTranslation = async () => {
 
   const payload: Partial<BankTranslation> = {
     customLabel: customLabel.value,
-    category: category.value?.["@id"],
+    category: category.value,
   };
 
   try {
@@ -100,7 +99,12 @@ const updateTranslation = async () => {
 
 onBeforeMount(async () => {
   await getBankTranslation();
-  await fetchCategories();
+  if (categoryStore.categories.length === 0) {
+    await categoryStore.setCategories();
+  }
+
+  categories.value = categoryStore.categories;
+  mapCurrentValues();
 });
 </script>
 

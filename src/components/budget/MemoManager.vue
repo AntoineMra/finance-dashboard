@@ -5,11 +5,10 @@
     </div>
 
     <div v-if="memos.length !== 0">
-      <h2>Mes mémos</h2>
       <ul>
-        <li v-for="memo in memos" :key="memo.id">
-          <div class="card">
-            <p class="card-content">{{ memo.content }}</p>
+        <li class="" v-for="memo in memos" :key="memo.id">
+          <div>
+            <p>{{ memo.content }}</p>
           </div>
         </li>
       </ul>
@@ -68,12 +67,16 @@ const props = defineProps({
   },
 });
 
-const retrieveMemos = () => {
+const retrieveMemos = async () => {
   const instance = getInstance();
 
-  instance.get("/memos").then((response) => {
-    memos.value = response.data["hydra:member"];
+  const response = await instance.get("/memos", {
+    headers: {
+      Accept: "application/ld+json",
+    },
   });
+
+  memos.value = response.data["hydra:member"];
 };
 
 const filterMemos = () => {
@@ -97,20 +100,10 @@ const createMemo = async (e: Event) => {
   date.value = "";
 };
 
-onBeforeMount(() => {
-  retrieveMemos();
+onBeforeMount(async () => {
+  await retrieveMemos();
   filterMemos();
 });
 </script>
 
-<style lang="scss" scoped>
-.card {
-  border: 1px solid black;
-  padding: 1rem;
-  margin: 1rem;
-}
-
-.card-content {
-  font-size: 1.5rem;
-}
-</style>
+<style lang="scss" scoped></style>

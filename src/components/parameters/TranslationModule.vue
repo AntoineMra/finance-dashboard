@@ -33,7 +33,7 @@
               class="hover:cursor-pointer hover:bg-gray-100"
               v-for="translation in bankTranslations"
               :key="translation.id"
-              @click="redirectToTranslation(translation.id)"
+              @click="redirectToTranslation(translation['@id'])"
             >
               <td
                 class="px-5 py-5 border-b text-center border-x-2 border-gray-200 text-sm"
@@ -60,7 +60,7 @@
                 class="px-5 py-5 border-b text-center border-x-2 border-gray-200 text-sm"
               >
                 <button
-                  @click="deleteTranslation(translation.id)"
+                  @click="deleteTranslation(translation['@id'])"
                   class="text-center text-xs text-red-500 cursor-pointer hover:text-red-400"
                 >
                   <svg
@@ -98,19 +98,32 @@ const router = useRouter();
 const getBankTranslations = async () => {
   try {
     const instance = getInstance();
-    const response = await instance.get("/bank_translations");
-    bankTranslations.value = response.data;
+    const response = await instance.get("/bank_translations", {
+      headers: {
+        Accept: "application/ld+json",
+      },
+    });
+    bankTranslations.value = response.data["hydra:member"];
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
   }
 };
 
-const redirectToTranslation = (id: string) => {
+const redirectToTranslation = (id: string | undefined) => {
+  if (id === undefined) {
+    return;
+  }
+  id = formatIriToId(id);
+
   router.push({ name: "editTranslation", params: { id } });
 };
 
-const deleteTranslation = async (id: string) => {
+const deleteTranslation = async (id: string | undefined) => {
+  if (id === undefined) {
+    return;
+  }
   const instance = getInstance();
+  id = formatIriToId(id);
 
   try {
     const response = await instance.delete(`/bank_translations/${id}`);
@@ -121,6 +134,11 @@ const deleteTranslation = async (id: string) => {
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
   }
+};
+
+const formatIriToId = (iri: string) => {
+  const splittedIri = iri.split("/");
+  return splittedIri[splittedIri.length - 1];
 };
 
 onBeforeMount(() => {
