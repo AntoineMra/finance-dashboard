@@ -1,24 +1,20 @@
 <template>
-  <div class="modal" v-if="hidden">
-    <form
-      @submit.prevent="validateDraft"
-      class="mx-auto mt-16 max-w-xl sm:mt-20"
-    >
+  <div class="modal">
+    <form @submit.prevent="validateDraft" class="mx-auto my-16 max-w-xl">
       <div>
         <label
           for="name"
           class="block text-sm font-semibold leading-6 text-gray-900"
-          >Nom de la transaction</label
+          >Nom de la transaction *</label
         >
         <div class="mt-2.5">
-          <input
+          <v-text-field
             v-model="label"
             type="text"
             name="name"
             id="name"
             required
             autocomplete="Transaction"
-            class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
           />
         </div>
       </div>
@@ -26,17 +22,16 @@
         <label
           for="amount"
           class="block text-sm font-semibold leading-6 text-gray-900"
-          >Montant</label
+          >Montant *</label
         >
-        <div class="mt-2.5">
-          <input
+        <div>
+          <v-text-field
             v-model="amount"
             type="number"
             name="amount"
             id="amount"
             required
             autocomplete="100"
-            class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
           />
         </div>
       </div>
@@ -46,40 +41,50 @@
           class="block text-sm font-semibold leading-6 text-gray-900"
           >Date</label
         >
-        <div class="mt-2.5">
-          <input
+        <div>
+          <v-text-field
             v-model="date"
+            :placeholder="date"
             type="date"
             name="date"
             id="date"
-            class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
           />
         </div>
       </div>
       <div>
         <label
-          for="category"
+          for="date"
           class="block text-sm font-semibold leading-6 text-gray-900"
-          >Catégorie</label
+          >Catégorie *</label
+        >
+        <v-select
+          v-model="category"
+          density="compact"
+          :items="categories"
+          item-title="label"
+          item-value="id"
+          required
+        >
+        </v-select>
+      </div>
+
+      <div>
+        <label
+          for="comment"
+          class="block text-sm font-semibold leading-6 text-gray-900"
+          >Commentaire</label
         >
         <div class="mt-2.5">
-          <select
-            v-model="category"
-            name="domain"
-            id="domain"
-            class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
-          >
-            <option
-              v-for="category in categories"
-              :key="category.id"
-              :value="category.id"
-            >
-              {{ category?.label }}
-            </option>
-          </select>
+          <v-textarea
+            v-model="comment"
+            type="text"
+            name="comment"
+            id="comment"
+            autocomplete="Commentaire"
+          />
         </div>
       </div>
-      <div class="mt-10">
+      <div>
         <button
           type="submit"
           class="block w-full rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
@@ -100,12 +105,9 @@ import { useCategoryStore } from "../../stores/category";
 
 const props = defineProps<{
   draftObject: Partial<DraftObject> | undefined;
-  hidden: boolean;
 }>();
 
-const emits = defineEmits<{
-  close: () => void;
-}>();
+const emits = defineEmits(["close"]);
 const label = ref<string>("");
 const amount = ref<number | undefined>();
 const date = ref<string>("");
@@ -117,32 +119,55 @@ const categoryStore = useCategoryStore();
 const validateDraft = async (event: Event) => {
   event.preventDefault();
   const instance = getInstance();
-  const category = (event.target as HTMLFormElement).category.value;
 
   const transaction = {
     label: label.value,
     amount: amount.value,
     date: date.value,
-    category: category,
+    category: `/api/categories/${category.value}`,
+    budget: props.draftObject?.transaction?.budget,
+    type: props.draftObject?.transaction?.type,
     comment: comment.value,
     status: "validated",
   };
+
   const translation = {
-    customLabel: "string",
-    category: "string",
+    customLabel: label.value,
+    category: category.value,
     status: "validated",
   };
 
-  console.log(transaction, translation);
+  try {
+    const responseTransac = await instance.post(`/transactions`, transaction);
 
-  // TODO: Add update the transaction and push a translation
+    if (props.draftObject?.translation?.id !== undefined) {
+      try {
+        await instance.put(
+          `/bank_translations/${props.draftObject?.translation?.id}`,
+          {
+            translation,
+          }
+        );
+      } catch (error) {
+        console.error("Error while updating translation");
+      }
+    }
 
-  emits.close();
+    const transac = responseTransac.data;
+
+    emits("close", transac);
+  } catch (error: any) {
+    if (error.response.status === 401) {
+      handleExpiredToken();
+    } else if (error.response.status === 400) {
+      throw new Error(error.response.data);
+    }
+  }
 };
 
 const mapExistingValues = () => {
   if (props.draftObject) {
-    label.value = props.draftObject?.transaction?.label ?? "";
+    label.value = props.draftObject?.translation?.bankLabel ?? "";
     amount.value = props.draftObject?.transaction?.amount;
     date.value = props.draftObject?.transaction?.date ?? "";
     category.value = props.draftObject?.transaction?.category ?? "";
@@ -150,9 +175,9 @@ const mapExistingValues = () => {
   }
 };
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (categoryStore.categories.length === 0) {
-    categoryStore.setCategories();
+    await categoryStore.setCategories();
   }
 
   categories.value = categoryStore.categories;
@@ -161,4 +186,11 @@ onBeforeMount(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.modal {
+  background-color: white;
+  backdrop-filter: blur(2px);
+  border-radius: 12px;
+  padding: 2rem;
+}
+</style>

@@ -21,7 +21,7 @@
             <td
               class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
             >
-              {{ domain.name }}
+              {{ domain.label }}
             </td>
             <td
               class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
@@ -36,13 +36,14 @@
 </template>
 
 <script setup lang="ts">
-import type { Budget, Domain } from "@/interface/api";
+import type { Budget, Category, Domain, Transaction } from "@/interface/api";
 import { onBeforeMount, ref } from "vue";
-import { useCategoryStore } from "@/stores/category";
 import { getInstance } from "@/api/axios";
+import { handleExpiredToken } from "@/api/config";
+import { useCategoryStore } from "@/stores/category";
 
 const props = defineProps<{
-  budget: Buget | null;
+  budget: Budget | undefined;
 }>();
 
 let domains = ref<Domain[]>([]);
@@ -59,7 +60,41 @@ const getDomains = async () => {
   }
 };
 
-onBeforeMount(() => {
+const categories = ref<Category[] | undefined>();
+const categoryStore = useCategoryStore();
+
+const getDomainValue = (domainId: string) => {
+  // Check if domain isn't a IRI instead of ID
+  const transactions = props.budget?.transactions.filter(
+    (transaction: Transaction) => {
+      const category = categories.value?.find(
+        (category: Category) => category["@id"] === transaction.category
+      );
+
+      if (category) {
+        return category.domain.id === domainId;
+      }
+    }
+  );
+
+  if (transactions) {
+    const total = transactions.reduce(
+      (acc: number, transaction: Transaction) => acc + transaction.amount,
+      0
+    );
+
+    return total;
+  }
+
+  return 0;
+};
+
+onBeforeMount(async () => {
+  if (categoryStore.categories.length === 0) {
+    await categoryStore.setCategories();
+  }
+
+  categories.value = categoryStore.categories;
   getDomains();
 });
 </script>

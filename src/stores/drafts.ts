@@ -10,17 +10,34 @@ export const useDraftsStore = defineStore({
       const storageDrafts = localStorage.getItem("drafts");
       const drafts = storageDrafts ? JSON.parse(storageDrafts) : null;
 
-      if (drafts === null || id === undefined) {
+      if (!drafts || id === undefined) {
         return [];
       }
 
-      return drafts.find((draft: any) => draft.id === id).drafts;
+      const draft = drafts.find((draft: any) => draft.id === id);
+      return draft ? draft.drafts : [];
     },
   },
   actions: {
     persistDrafts(id: string, draftObjects: any[]) {
       this.drafts.push({ id: id, drafts: draftObjects });
       localStorage.setItem("drafts", JSON.stringify(this.drafts));
+    },
+    updatePersistedDrafts(id: string, draftObjects: any[]) {
+      const storageDrafts = localStorage.getItem("drafts");
+      const drafts = storageDrafts ? JSON.parse(storageDrafts) : null;
+
+      if (!drafts) {
+        return;
+      }
+
+      const draft = drafts.find((draft: any) => draft.id === id);
+      if (!draft) {
+        return;
+      }
+
+      draft.drafts = draftObjects;
+      localStorage.setItem("drafts", JSON.stringify(drafts));
     },
   },
 });

@@ -2,7 +2,7 @@ Année
 <template>
   <section class="glass w-full mb-10">
     <h2 class="pb-4 pt-8 px-8 text-center text-2xl flex-shrink-0">
-      Moyenne de mes derniers {{ props.transacType }}
+      Moyenne de mes {{ props.transacType }}
     </h2>
     <h2
       class="py-4 pb-8 px-8 text-center text-3xl font-bold flex-shrink-0 cursor-pointer"
@@ -42,11 +42,6 @@ const getBudgets = async () => {
     return budget.totalTransactions;
   });
 };
-
-const getMediumValue = () => {
-  //TODO: To be calculate with values
-};
-
 
 function reset() {
   medium.value = "Année " + 500;

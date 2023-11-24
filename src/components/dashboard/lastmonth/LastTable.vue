@@ -1,61 +1,70 @@
 <template>
   <div class="w-full -mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-    <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
-      <table class="min-w-full leading-normal">
+    <div class="w-full inline-block shadow rounded-lg overflow-hidden">
+      <table class="w-full leading-normal">
         <thead>
           <tr>
             <th
-              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+              class="px-4 py-4 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
             >
               Date
             </th>
             <th
-              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+              class="px-4 py-4 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
             >
               Description
             </th>
             <th
-              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+              class="px-4 py-4 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
             >
               Montant
             </th>
             <th
-              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+              class="px-4 py-4 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
             >
               Categorie
             </th>
             <th
-              class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+              class="px-4 py-4 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
             >
               Type
+            </th>
+            <th
+              class="px-4 py-4 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
+            >
+              Commentaire
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="transaction in limitedTransactions" :key="transaction.id">
+          <tr
+            class="relative"
+            v-for="transaction in limitedTransactions"
+            :key="transaction.id"
+          >
             <td
-              class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
+              class="px-2 py-4 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
             >
               <p class="text-gray-900 whitespace-no-wrap">
                 {{ formatDate(transaction.date) }}
               </p>
             </td>
             <td
-              class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
+              class="px-4 py-4 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
             >
               <p class="text-gray-900 whitespace-no-wrap">
                 {{ transaction.label }}
               </p>
             </td>
             <td
-              class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
+              class="px-4 py-4 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
             >
               <p class="text-gray-900 whitespace-no-wrap">
                 {{ transaction.amount }} €
               </p>
             </td>
             <td
-              class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
+              class="px-4 py-4 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
             >
               <p class="text-gray-900 whitespace-no-wrap">
                 {{
@@ -66,10 +75,10 @@
               </p>
             </td>
             <td
-              class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
+              class="px-4 py-4 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
             >
               <span
-                class="relative inline-block px-3 py-1 font-semibold leading-tight"
+                class="relative inline-block px-4 py-1 font-semibold leading-tight"
                 :class="
                   transaction.type === 'expense'
                     ? 'text-red-900'
@@ -89,6 +98,13 @@
                   translateType(transaction.type)
                 }}</span>
               </span>
+            </td>
+            <td
+              class="px-4 py-4 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
+            >
+              <p class="text-gray-900 whitespace-no-wrap">
+                {{ transaction.comment }}
+              </p>
             </td>
           </tr>
         </tbody>
@@ -146,9 +162,9 @@ const formatDate = (date: string | undefined) => {
   return `${day}/${month}`;
 };
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (categoryStore.categories.length === 0) {
-    categoryStore.setCategories();
+    await categoryStore.setCategories();
   }
 
   categories.value = categoryStore.categories;

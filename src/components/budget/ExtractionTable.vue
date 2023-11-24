@@ -81,11 +81,9 @@
           </tr>
         </tbody>
       </table>
-      <draft-modal
-        :draftObject="selectedDraftObject"
-        :hidden="hidden"
-        @close="closeModal"
-      />
+      <v-dialog v-model="dialog">
+        <draft-modal :draftObject="selectedDraftObject" @close="closeModal" />
+      </v-dialog>
     </div>
   </div>
 </template>
@@ -100,19 +98,24 @@ const props = defineProps<{
   draftTransaction: Partial<DraftObject>[] | undefined;
 }>();
 
+const emits = defineEmits(["push-transaction"]);
+
 const categories = ref<Category[] | undefined>();
-const hidden = ref<boolean>(true);
+const dialog = ref<boolean>(false);
 const selectedDraftObject = ref<Partial<DraftObject> | undefined>();
 const categoryStore = useCategoryStore();
 
 const openModal = (draft: Partial<DraftObject>) => {
   selectedDraftObject.value = draft;
-  hidden.value = false;
+  dialog.value = true;
 };
 
-const closeModal = () => {
+const closeModal = (transac: any) => {
+  if (transac) {
+    emits("push-transaction", transac);
+  }
   selectedDraftObject.value = undefined;
-  hidden.value = true;
+  dialog.value = false;
 };
 
 const translateType = (type: string) => {
@@ -123,9 +126,9 @@ const translateType = (type: string) => {
   return "Revenu";
 };
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (categoryStore.categories.length === 0) {
-    categoryStore.setCategories();
+    await categoryStore.setCategories();
   }
 
   categories.value = categoryStore.categories;

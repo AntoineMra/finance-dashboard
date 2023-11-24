@@ -1,8 +1,8 @@
 <template>
-  <div class="p-8 pb-2 w-full glass">
+  <div class="p-8 pb-6 w-full glass">
     <h2 class="text-xl font-bold">Modules de paramètrages des catégories</h2>
     <div class="flex justify-between">
-      <div class="mt-16 max-w-xl sm:mt-20">
+      <div class="mt-16 max-w-xl sm:mt-20 overflow-y-scroll h-96">
         <table class="min-w-full leading-normal">
           <thead>
             <tr>
@@ -19,7 +19,7 @@
               <th
                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-bold text-gray-600 uppercase"
               >
-                Supprimer
+                Action
               </th>
             </tr>
           </thead>
@@ -35,19 +35,33 @@
               <td
                 class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
               >
-                <p class="text-gray-900 whitespace-no-wrap">
-                  {{ getDomainById(category.domain)?.label }}
+                <p
+                  class="text-gray-900 whitespace-no-wrap p-2 rounded-md"
+                  :style="{ backgroundColor: category.domain?.color }"
+                >
+                  {{ category.domain?.label }}
                 </p>
               </td>
               <td
                 class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
               >
-                <p
+                <button
                   @click="deleteCategory(category.id)"
                   class="text-center text-xs text-red-500 cursor-pointer hover:text-red-400"
                 >
-                  Supprimer
-                </p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10.707 10l4.147-4.146a.5.5 0 10-.708-.708L10 9.293 5.854 5.147a.5.5 0 10-.708.708L9.293 10l-4.147 4.146a.5.5 0 10.708.708L10 10.707l4.146 4.147a.5.5 0 00.708-.708L10.707 10z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
               </td>
             </tr>
           </tbody>
@@ -94,6 +108,38 @@
                 </option>
               </select>
             </div>
+            <div>
+              <label
+                for="type"
+                class="block pt-6 pb-2 text-sm font-semibold leading-6 text-gray-900"
+                >Type</label
+              >
+              <div class="flex">
+                <div class="flex content-center pr-6">
+                  <input
+                    v-model="type"
+                    type="radio"
+                    value="expense"
+                    name="expense"
+                    id="expense"
+                    class="mr-2"
+                  />
+                  <label for="expense" class="text-sm">Dépense</label>
+                </div>
+
+                <div class="flex content-center">
+                  <input
+                    v-model="type"
+                    type="radio"
+                    value="income"
+                    name="income"
+                    id="income"
+                    class="mr-2"
+                  />
+                  <label class="text-sm" for="income">Revenu</label>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <router-view />
@@ -118,13 +164,15 @@ import { handleExpiredToken } from "@/api/config";
 
 const label = ref<string>("");
 const domain = ref<string>();
+const type = ref<string>("");
 const domains = ref<Domain[]>([]);
 const categories = ref<Category[]>([]);
 
 const createCategory = async () => {
-  const payload: Partial<Category> = {
+  const payload: object = {
     label: label.value,
     domain: `api/domains/${domain.value}`,
+    type: type.value,
   };
   const instance = getInstance();
 
@@ -132,21 +180,6 @@ const createCategory = async () => {
     const response = await instance.post("/categories", payload);
     const category = response.data;
     categories.value.push(category);
-  } catch (error: any) {
-    if (error.response.status === 401) handleExpiredToken();
-  }
-};
-
-const updateCategory = async () => {
-  const payload: Partial<Category> = {
-    label: label.value,
-    domain: `api/domains/${domain.value}`,
-  };
-  const instance = getInstance();
-
-  try {
-    const response = await instance.put("/categories", payload);
-    const category = response.data;
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
   }
@@ -173,10 +206,6 @@ const getAllDomains = async () => {
   } catch (error: any) {
     if (error.response.status === 401) handleExpiredToken();
   }
-};
-
-const getDomainById = (id: string) => {
-  return domains.value.find((domain) => domain.id === id);
 };
 
 const getAllCategories = async () => {

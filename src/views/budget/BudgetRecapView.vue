@@ -63,6 +63,8 @@ const getBudget = async () => {
 
 // TODO Add possibility to fetch goal and show if it's reached or not on the top bubble
 
+// TODO Add possibility to Manage memos
+
 onBeforeMount(() => {
   getBudget();
 });
@@ -78,4 +80,3 @@ onBeforeMount(() => {
   border: 2px solid rgba(255, 255, 255, 0.3);
 }
 </style>
-

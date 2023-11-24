@@ -17,13 +17,15 @@ export interface Category {
   "@id"?: string;
   id: string;
   label: string;
-  domain: string;
+  type: TransacType;
+  domain: Domain;
 }
 
 export interface Transaction {
   "@id"?: string;
   id: string;
   date?: string;
+  budget?: string;
   label: string;
   amount: number;
   type: TransacType;
@@ -59,6 +61,16 @@ export interface Goal {
   investment: Invest;
 }
 
+export interface Memo {
+  "@id"?: string;
+  id: string;
+  content: string;
+  date: Date;
+  formatedDate: string;
+  status: string;
+  createdAt?: Date;
+}
+
 export interface Support {
   "@id"?: string;
   id: string;
@@ -88,6 +100,7 @@ export interface BankTranslation {
   bankLabel: string;
   customLabel: string;
   category: string;
+  status: string;
 }
 
 export interface BankExtractionResponse {
