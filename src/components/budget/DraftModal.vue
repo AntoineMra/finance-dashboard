@@ -133,7 +133,7 @@ const validateDraft = async (event: Event) => {
 
   const translation = {
     customLabel: label.value,
-    category: category.value,
+    category: `/api/categories/${category.value}`,
     status: "validated",
   };
 
@@ -144,9 +144,7 @@ const validateDraft = async (event: Event) => {
       try {
         await instance.put(
           `/bank_translations/${props.draftObject?.translation?.id}`,
-          {
-            translation,
-          }
+          translation
         );
       } catch (error) {
         console.error("Error while updating translation");
