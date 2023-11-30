@@ -13,42 +13,6 @@
             @submit.prevent="createTransaction"
             class="py-4 px-8 max-w-xl sm:py-20 bg-gray-100 shadow-md rounded-md"
           >
-            <div class="w-full pb-4">
-              <ul class="flex justify-between content-center w-full">
-                <li
-                  class="px-4 py-2 rounded-md cursor-pointer"
-                  :class="
-                    type === 'expense' ? 'bg-purple-300' : 'bg-purple-100'
-                  "
-                >
-                  <input
-                    class="d-none"
-                    type="radio"
-                    id="expense"
-                    name="type"
-                    value="expense"
-                    @change="filterCategories(categoryStore.categories)"
-                    v-model="type"
-                  />
-                  <label class="cursor-pointer" for="expense">Dépense</label>
-                </li>
-                <li
-                  class="px-4 py-2 rounded-md cursor-pointer"
-                  :class="type === 'income' ? 'bg-purple-300' : 'bg-purple-100'"
-                >
-                  <input
-                    class="d-none"
-                    type="radio"
-                    id="income"
-                    name="type"
-                    value="income"
-                    @change="filterCategories(categoryStore.categories)"
-                    v-model="type"
-                  />
-                  <label class="cursor-pointer" for="income">Revenu</label>
-                </li>
-              </ul>
-            </div>
             <div>
               <label
                 for="name"
@@ -92,15 +56,55 @@
                 class="block text-sm font-semibold leading-6 text-gray-900"
                 >Date</label
               >
-              <select>
-                <option
-                  v-for="category in categories"
-                  :key="category.id"
-                  :value="category.id"
+              <input
+                type="date"
+                v-model="date"
+                name="date"
+                id="date"
+                class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600"
+              />
+            </div>
+            <div class="mt-8">
+              <ul class="flex content-center w-full">
+                <li
+                  class="px-4 py-2 rounded-md cursor-pointer border-2"
+                  :class="
+                    type === 'expense'
+                      ? 'border-purple-300 text-purple-300'
+                      : 'border-gray-400 text-black'
+                  "
                 >
-                  {{ category?.label }}
-                </option>
-              </select>
+                  <input
+                    class="d-none"
+                    type="radio"
+                    id="expense"
+                    name="type"
+                    value="expense"
+                    @change="filterCategories(categoryStore.categories)"
+                    v-model="type"
+                  />
+                  <label class="cursor-pointer" for="expense">Dépense</label>
+                </li>
+                <li
+                  class="px-4 py-2 ml-4 rounded-md cursor-pointer border-2"
+                  :class="
+                    type === 'income'
+                      ? 'border-purple-300 text-purple-300'
+                      : 'border-gray-400 text-black'
+                  "
+                >
+                  <input
+                    class="d-none"
+                    type="radio"
+                    id="income"
+                    name="type"
+                    value="income"
+                    @change="filterCategories(categoryStore.categories)"
+                    v-model="type"
+                  />
+                  <label class="cursor-pointer" for="income">Revenu</label>
+                </li>
+              </ul>
             </div>
             <div class="mt-2">
               <label

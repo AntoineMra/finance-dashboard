@@ -175,14 +175,22 @@ const mapExistingValues = () => {
   }
 };
 
+const filterCategories = (allCategories: Category[]) => {
+  const filteredCategories = allCategories.filter(
+    (category: Category) =>
+      category.type === props.draftObject?.transaction?.type
+  );
+
+  categories.value = filteredCategories;
+};
+
 onBeforeMount(async () => {
   if (categoryStore.categories.length === 0) {
     await categoryStore.setCategories();
   }
 
-  categories.value = categoryStore.categories;
-
   mapExistingValues();
+  filterCategories(categoryStore.categories);
 });
 </script>
 
