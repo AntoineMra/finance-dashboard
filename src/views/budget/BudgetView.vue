@@ -34,7 +34,7 @@
           :amountExpense="450"
           :amountIncome="350"
           :key="budget.id"
-          @select="selectBudget"
+          @select="redirectToRecap"
         />
       </div>
       <h2 class="pl-8 text-2xl font-bold mb-5">
@@ -51,15 +51,6 @@
           @select="redirectToBudget"
         />
       </div>
-
-      <section v-if="transactions.length">
-        <h2 class="pl-12 text-3xl font-bold">
-          Liste de toutes les transactions
-        </h2>
-        <div class="w-full flex items-stretch justify-center flex-wrap">
-          <last-table :rows="null" :transactions="transactions" />
-        </div>
-      </section>
     </section>
   </div>
 </template>
@@ -67,15 +58,13 @@
 <script setup lang="ts">
 import { handleExpiredToken } from "@/api/config";
 import CardBudget from "@/components/budget/CardBudget.vue";
-import LastTable from "@/components/dashboard/lastmonth/LastTable.vue";
 import { ref, onBeforeMount } from "vue";
 import { getInstance } from "@/api/axios";
-import type { Budget, Transaction } from "@/interface/api";
+import type { Budget } from "@/interface/api";
 import { useRouter } from "vue-router";
 
 let completedBudgets = ref<Budget[]>([]);
 let wipBudgets = ref<Budget[]>([]);
-let transactions = ref<Transaction[]>([]);
 const router = useRouter();
 
 const getBudgets = async () => {
@@ -95,16 +84,12 @@ const getBudgets = async () => {
   }
 };
 
-const selectBudget = (budgetId: string) => {
-  const budget = completedBudgets.value.find(
-    (budget: Budget) => budget.id === budgetId
-  );
-
-  transactions.value = budget ? budget.transactions : [];
-};
-
 const redirectToBudget = (budgetId: string) => {
   router.push({ name: "budgetExtraction", params: { id: budgetId } });
+};
+
+const redirectToRecap = (budgetId: string) => {
+  router.push({ name: "budgetRecap", params: { id: budgetId } });
 };
 
 onBeforeMount(() => {

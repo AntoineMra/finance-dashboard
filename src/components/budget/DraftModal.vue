@@ -26,12 +26,12 @@
         >
         <div>
           <v-text-field
-            v-model="amount"
+            v-model.number="amount"
             type="number"
             name="amount"
             id="amount"
+            step="0.01"
             required
-            autocomplete="100"
           />
         </div>
       </div>
@@ -44,6 +44,7 @@
         <div>
           <v-text-field
             v-model="date"
+            :value="date"
             :placeholder="date"
             type="date"
             name="date"
@@ -57,15 +58,14 @@
           class="block text-sm font-semibold leading-6 text-gray-900"
           >Catégorie *</label
         >
-        <v-select
+        <v-autocomplete
           v-model="category"
           density="compact"
           :items="categories"
           item-title="label"
           item-value="id"
-          required
         >
-        </v-select>
+        </v-autocomplete>
       </div>
 
       <div>
@@ -110,7 +110,7 @@ const props = defineProps<{
 const emits = defineEmits(["close"]);
 const label = ref<string>("");
 const amount = ref<number | undefined>();
-const date = ref<string>("");
+const date = ref<Date>();
 const category = ref<string>("");
 const comment = ref<string>("");
 const categories = ref<Category[] | undefined>();
@@ -133,7 +133,7 @@ const validateDraft = async (event: Event) => {
 
   const translation = {
     customLabel: label.value,
-    category: category.value,
+    category: `/api/categories/${category.value}`,
     status: "validated",
   };
 
@@ -144,9 +144,7 @@ const validateDraft = async (event: Event) => {
       try {
         await instance.put(
           `/bank_translations/${props.draftObject?.translation?.id}`,
-          {
-            translation,
-          }
+          translation
         );
       } catch (error) {
         console.error("Error while updating translation");
@@ -169,10 +167,21 @@ const mapExistingValues = () => {
   if (props.draftObject) {
     label.value = props.draftObject?.translation?.bankLabel ?? "";
     amount.value = props.draftObject?.transaction?.amount;
-    date.value = props.draftObject?.transaction?.date ?? "";
+    date.value = props.draftObject?.transaction?.date
+      ? new Date(props.draftObject?.transaction?.date)
+      : new Date();
     category.value = props.draftObject?.transaction?.category ?? "";
     comment.value = props.draftObject?.transaction?.comment ?? "";
   }
+};
+
+const filterCategories = (allCategories: Category[]) => {
+  const filteredCategories = allCategories.filter(
+    (category: Category) =>
+      category.type === props.draftObject?.transaction?.type
+  );
+
+  categories.value = filteredCategories;
 };
 
 onBeforeMount(async () => {
@@ -180,9 +189,8 @@ onBeforeMount(async () => {
     await categoryStore.setCategories();
   }
 
-  categories.value = categoryStore.categories;
-
   mapExistingValues();
+  filterCategories(categoryStore.categories);
 });
 </script>
 
