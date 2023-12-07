@@ -3,7 +3,11 @@
     class="fixed left-0 top-0 h-full bg-stone-200/80 w-52 shadow-sm hover:shadow-xl py-16 px-8"
   >
     <div class="flex flex-col justify-around items-center h-full">
-      <h2 class="font-bold text-3xl py-8 text-center">Personal Finance</h2>
+      <h2
+        class="font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-fill-color text-4xl py-8 text-center"
+      >
+        Personal Finance
+      </h2>
       <ul class="nav-list text-slate-800">
         <li class="py-4">
           <router-link

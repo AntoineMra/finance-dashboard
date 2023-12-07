@@ -26,7 +26,7 @@
             <td
               class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
             >
-              {{ getCategoryValue(category.id) }}
+              {{ getCategoryValue(category.id) }} €
             </td>
           </tr>
         </tbody>

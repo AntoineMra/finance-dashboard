@@ -26,7 +26,7 @@
             <td
               class="px-5 py-5 border-b text-center border-x-2 border-gray-200 bg-white text-sm"
             >
-              {{ getDomainValue(domain.id) }}
+              {{ getDomainValue(domain.id) }} €
             </td>
           </tr>
         </tbody>

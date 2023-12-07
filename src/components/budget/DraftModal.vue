@@ -26,12 +26,12 @@
         >
         <div>
           <v-text-field
-            :model-value="amount"
+            v-model.number="amount"
             type="number"
             name="amount"
             id="amount"
+            step="0.01"
             required
-            autocomplete="100"
           />
         </div>
       </div>
@@ -64,7 +64,6 @@
           :items="categories"
           item-title="label"
           item-value="id"
-          required
         >
         </v-autocomplete>
       </div>
