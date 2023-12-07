@@ -14,15 +14,31 @@
               : " dépensés ce mois-ci"
           }}
         </p>
+        <p class="text-lg">
+          <span class="text-xl font-bold">
+            {{ budget?.transactionsPercent + "%" }}
+          </span>
+          de taux d'épargne
+        </p>
       </div>
     </header>
 
     <section class="glass">
-      <div class="w-full flex items-stretch justify-center flex-wrap pb-8">
-        <last-table :rows="null" :transactions="budget?.transactions" />
+      <div class="w-full flex items-stretch justify-between flex-wrap pb-16">
+        <div class="mb-4">
+          <span class="text-xl font-bold">
+            Somme des dépenses du mois :
+            {{ budget?.transactionsTotalExpense + " €" }}
+          </span>
+        </div>
+        <div class="mb-4">
+          <span class="text-xl font-bold">
+            Somme des revenus du mois :
+            {{ budget?.transactionsTotalIncome + " €" }}
+          </span>
+        </div>
       </div>
-
-      <div class="w-full flex items-stretch justify-center flex-wrap">
+      <div class="w-full flex items-stretch justify-between flex-wrap">
         <div class="mb-4">
           <category-table :budget="budget" />
         </div>
@@ -62,8 +78,6 @@ const getBudget = async () => {
 };
 
 // TODO Add possibility to fetch goal and show if it's reached or not on the top bubble
-
-// TODO Add possibility to Manage memos
 
 onBeforeMount(() => {
   getBudget();
