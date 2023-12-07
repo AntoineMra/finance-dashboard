@@ -92,7 +92,6 @@
 
 <script setup lang="ts">
 import type { Budget } from "@/interface/api";
-import { defineProps } from "vue";
 
 const props = defineProps<{
   budget: Budget | null;
