@@ -20,4 +20,4 @@ COPY . .
 RUN npm run build-only
 
 # Set the command to run the app
-CMD [ "npx", "serve", "-s", "build" ]
+CMD [ "npx", "serve", "-s", "dist", "-p", "4173" ]
