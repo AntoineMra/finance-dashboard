@@ -17,7 +17,7 @@ RUN npm install
 COPY . .
 
 # Build the Vue app
-RUN npm run build
+RUN npm run build-only
 
 # Set the command to run the app
 CMD [ "npx", "serve", "-s", "build" ]
