@@ -8,7 +8,7 @@ Année
       class="py-4 pb-8 px-8 text-center text-3xl font-bold flex-shrink-0 cursor-pointer"
       @click="reset"
     >
-      {{ medium }} €
+      Année {{ medium }} €
     </h2>
     <div class="px-8 pb-4">
       <select class="p-2 mb-4 rounded-lg outline-none" name="" id="">
@@ -30,7 +30,7 @@ const props = defineProps({
 });
 
 let budgets = ref<[]>([]);
-let medium = ref<string>("Année " + 500);
+let medium = ref<string>(0);
 
 const getBudgets = async () => {
   const instance = getInstance();
@@ -38,13 +38,32 @@ const getBudgets = async () => {
   const budgets = response.data;
 
   budgets.value = budgets.map((budget: any) => {
-    //TODO must be filtered with the transacType
-    return budget.totalTransactions;
+    if (transacType === "Revenus") {
+      return budget.transactionsTotalIncome;
+    }
+    return budget.transactionsTotalExpense;
   });
+
+  medium.value = getMedian(budgets.value);
 };
 
 function reset() {
-  medium.value = "Année " + 500;
+  medium.value = getMedian(budgets.value);
+}
+
+function getMedian(arr: Record<string, number>) {
+  arr.sort((a, b) => a - b);
+
+  const length = arr.length;
+  const middle = Math.floor(length / 2);
+
+  if (length % 2 === 1) {
+    // Odd length
+    return arr[middle];
+  } else {
+    // Even length
+    return (arr[middle - 1] + arr[middle]) / 2;
+  }
 }
 
 //Remplacer les data par un appel API
