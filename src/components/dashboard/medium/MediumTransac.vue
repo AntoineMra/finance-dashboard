@@ -58,13 +58,33 @@ function getMedian(arr: Record<string, number>) {
   const middle = Math.floor(length / 2);
 
   if (length % 2 === 1) {
-    // Odd length
     return arr[middle];
   } else {
-    // Even length
     return (arr[middle - 1] + arr[middle]) / 2;
   }
 }
+
+// Mapping budgets.value into an array based on budget.date
+const monthlyBudgets = ref<number[]>([]);
+const monthsMapping: Record<string, number> = {};
+
+const mapBudgetsByMonth = () => {
+  budgets.value.forEach((budget: any) => {
+    const date = new Date(budget.date);
+    const month = date.getMonth();
+    const total = transacType === "Revenus" ? budget.transactionsTotalIncome : budget.transactionsTotalExpense;
+
+    if (monthsMapping[month] === undefined || date > new Date(monthsMapping[month])) {
+      monthsMapping[month] = total;
+    }
+  });
+
+  // Fill the monthlyBudgets array with mapped values
+  labels.map((label, index) => {
+    monthlyBudgets.value[index] = monthsMapping[index] || 0;
+  });
+};
+
 
 //Remplacer les data par un appel API
 
