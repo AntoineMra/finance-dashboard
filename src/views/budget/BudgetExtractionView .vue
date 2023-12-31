@@ -9,30 +9,42 @@
       <div class="w-full">
         <form @submit.prevent="postExtraction()" class="mt-4 mb-8">
           <div
-            class="border-gray-300 bg-gray-200 rounded-lg border-2 mx-24 p-16 flex justify-center items-center"
+            class="border-gray-300 bg-gray-200 rounded-lg border-2 mx-24 p-16"
           >
-            <div class="pr-8">
-              <label
-                for="formFile"
-                class="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
-                >Fichier d'extraction</label
+            <div class="flex justify-center items-center">
+              <div class="pr-8">
+                <label
+                  for="formFile"
+                  class="mb-2 text-lg inline-block text-neutral-700 dark:text-neutral-200"
+                  >Fichier d'extraction</label
+                >
+                <input
+                  class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
+                  type="file"
+                  id="formFile"
+                  @change="onFileChange"
+                />
+              </div>
+
+              <div class="text-red-500 text-sm ml-4">{{ fileError }}</div>
+
+              <button
+                type="submit"
+                class="block w-32 self-end rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
               >
-              <input
-                class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
-                type="file"
-                id="formFile"
-                @change="onFileChange"
-              />
+                Extraire
+              </button>
             </div>
 
-            <div class="text-red-500 text-sm ml-4">{{ fileError }}</div>
-
-            <button
-              type="submit"
-              class="block w-32 self-end rounded-md bg-purple-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
-            >
-              Extraire
-            </button>
+            <div class="mt-8">
+              <a
+                href="/doc-extraction.pdf"
+                target="_blank"
+                class="bg-blue-200 info py-2 px-2 text-center rounded-md"
+              >
+                Plus d'information pour obtenir l'extraction ici
+              </a>
+            </div>
           </div>
         </form>
         <div class="mt-10" v-if="pendingTransactions.length !== 0">
@@ -226,6 +238,10 @@ onBeforeMount(() => {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.info {
+  font-size: 8px;
 }
 
 .glass {
