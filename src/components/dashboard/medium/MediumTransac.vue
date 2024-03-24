@@ -1,4 +1,4 @@
-Année
+<!-- Année
 <template>
   <section class="glass w-full mb-10">
     <h2 class="pb-4 pt-8 px-8 text-center text-2xl flex-shrink-0">
@@ -30,7 +30,7 @@ const props = defineProps({
 });
 
 let budgets = ref<[]>([]);
-let medium = ref<string>(0);
+//let medium = ref<string>(0);
 
 const getBudgets = async () => {
   const instance = getInstance();
@@ -38,17 +38,17 @@ const getBudgets = async () => {
   const budgets = response.data;
 
   budgets.value = budgets.map((budget: any) => {
-    if (transacType === "Revenus") {
-      return budget.transactionsTotalIncome;
-    }
+    //if (transacType === "Revenus") {
+    //  return budget.transactionsTotalIncome;
+    //}
     return budget.transactionsTotalExpense;
   });
 
-  medium.value = getMedian(budgets.value);
+  //medium.value = getMedian(budgets.value);
 };
 
 function reset() {
-  medium.value = getMedian(budgets.value);
+  //medium.value = getMedian(budgets.value);
 }
 
 function getMedian(arr: Record<string, number>) {
@@ -72,9 +72,15 @@ const mapBudgetsByMonth = () => {
   budgets.value.forEach((budget: any) => {
     const date = new Date(budget.date);
     const month = date.getMonth();
-    const total = transacType === "Revenus" ? budget.transactionsTotalIncome : budget.transactionsTotalExpense;
+    const total =
+      transacType === "Revenus"
+        ? budget.transactionsTotalIncome
+        : budget.transactionsTotalExpense;
 
-    if (monthsMapping[month] === undefined || date > new Date(monthsMapping[month])) {
+    if (
+      monthsMapping[month] === undefined ||
+      date > new Date(monthsMapping[month])
+    ) {
       monthsMapping[month] = total;
     }
   });
@@ -84,7 +90,6 @@ const mapBudgetsByMonth = () => {
     monthlyBudgets.value[index] = monthsMapping[index] || 0;
   });
 };
-
 
 //Remplacer les data par un appel API
 
@@ -167,3 +172,4 @@ onBeforeMount(async () => {
 </script>
 
 <style lang="scss" scoped></style>
+ -->
