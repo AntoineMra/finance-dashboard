@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "vite",
+    "dev:test": "vite --mode test",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
-    "test:e2e": "start-server-and-test 'vite preview --port 4173' :4173 'cypress run --e2e'",
+    "test:e2e": "cypress run --e2e",
+    "ci:e2e": "start-server-and-test dev:test http://localhost:5173 test:e2e",
     "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' :4173 'cypress open --e2e'",
     "test:unit": "cypress run --component",
     "test:unit:dev": "cypress open --component",
